@@ -1,5 +1,6 @@
-         123456         D      1212/12/12 12:12            jasgevfu            uwfebywf
-         234567         A        12/12/12 12:12                  12                  12
-         345678         A      1212/12/12 12:12             abrtbtr         agertat5egh
-        1311131         A      2023/12/12 12:12              ikbwef              wfnelV
-        6318868         D      2323/323/56 465:54              kRNVAR           atrgja;tb
+         123456         D      2023/12/12 13:42              Prague          Boeing 777
+         234567         A      2023/12/12 10:12            Helsinki          Airbus 737
+         345678         A      2023/10/17 09:56            Hongkong          Boeing 777
+         111131         A      2023/12/12 12:12           Stockholm          Boeing 777
+         318868         D      2323/32/56 05:54             Vilnius          Airbus 333
+         552351         A      2023/05/16 12:36              Tallin          Airbus 737

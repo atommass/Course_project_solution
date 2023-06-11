@@ -6,10 +6,20 @@
 #include <string>
 
 #include <cstdlib> // to use system("cls");
+#include <mutex> // to use std::lock_guard<std::mutex> lock(mtx);
 
 // view Flight data
 constexpr int MAX_FLIGHTS = 100;
 int numFlights = 0;
+
+std::mutex console_mutex;
+void clear_console()
+{
+	console_mutex.lock();
+	system("cls");
+	console_mutex.unlock();
+}
+
 void readFlightDataFromFile(Flight flights[], int& numFlight)
 {
 	std::ifstream flight_data("flight_info_data.txt");
@@ -65,8 +75,7 @@ void viewFlightData()
 
 	std::cout << std::endl << "Press ENTER to exit view mode.";
 
-	std::getchar();
-	system("cls");
+	clear_console();
 }
 
 // Add data to flight data
@@ -134,8 +143,7 @@ void addFlightData()
 	std::cout << "Data added successfully! Press ENTER!";
 	delete[] new_flights;
 
-	std::getchar();
-	system("cls");
+	clear_console();
 }
 
 
@@ -185,6 +193,6 @@ void sortFlightData()
 	}*/
 
 
-
+	
 
 }
