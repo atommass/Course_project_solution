@@ -1,4 +1,4 @@
-#include "Functions.h"
+#include "Flight_Functions.h"
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -6,7 +6,7 @@
 #include <string>
 
 #include <cstdlib> // to use system("cls");
-#include <mutex> // to use std::lock_guard<std::mutex> lock(mtx);
+#include <mutex> // mutual exclusion to prevent multiple threads from accessing shared resources at the same time
 
 // view Flight data
 constexpr int MAX_FLIGHTS = 100;
@@ -26,7 +26,7 @@ void clear_console()
 	
 }
 
-void readFlightDataFromFile(Flight flights[], int& numFlight)
+void readFlightDataFromFile(Flight flights[], int& numFlights)
 {
 	std::ifstream flight_data("flight_info_data.txt");
 	if (!flight_data)
@@ -66,7 +66,7 @@ void readFlightDataFromFile(Flight flights[], int& numFlight)
 
 void viewFlightData()
 {
-	Flight existing_flights[MAX_FLIGHTS];
+	Flight existing_flights[MAX_FLIGHTS] = {};
 
 	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
 	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
@@ -80,7 +80,7 @@ void viewFlightData()
 		std::cout << std::setfill(' ');
 		std::cout << std::setw(8) << flight.flight_number;
 		std::cout << std::setw(10) << flight.direction;
-		
+
 		std::cout << std::setfill('0');
 		std::cout << std::right;
 		std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
@@ -92,11 +92,13 @@ void viewFlightData()
 		std::cout << std::endl;
 	}
 
+	std::cout << "Exit to MAIN MENU!" << std::endl;
 	clear_console();
+
 }
 
 // Add data to flight data
-void writeStructureToFile(Flight* flights, int n)
+void writeFlightStructureToFile(Flight* flights, int n)
 {
 	std::ofstream flight_data("flight_info_data.txt", std::ios::app);
 	if (!flight_data)
@@ -106,15 +108,23 @@ void writeStructureToFile(Flight* flights, int n)
 	}
 
 	for (int i = 0; i < n; i++) {
+
+		std::cout << std::setfill(' ');
 		flight_data << std::setw(15) << flights[i].flight_number;
 		flight_data << std::setw(10) << flights[i].direction;
-		flight_data << std::setw(10) << flights[i].time.year << "/" << flights[i].time.month << "/" << flights[i].time.day << " " << flights[i].time.hour << ":" << flights[i].time.min;
-		flight_data << std::setw(20) << flights[i].destination;
-		flight_data << std::setw(20) << flights[i].plane_model << std::endl;
+
+		std::cout << std::setfill('0');
+		flight_data << "      " << std::setw(4) << flights[i].time.year << "/" << std::setw(2) << std::setfill('0') << flights[i].time.month << "/" << std::setw(2) << std::setfill('0') << flights[i].time.day;
+		flight_data << " " << std::setw(2) << std::setfill('0') << flights[i].time.hour << ":" << std::setw(2) << std::setfill('0') << flights[i].time.min;
+
+		std::cout << std::setfill(' ');
+		flight_data << std::setw(20) << std::setfill(' ') << flights[i].destination;
+		flight_data << std::setw(20) << std::setfill(' ') << flights[i].plane_model;
+		flight_data << std::endl;
 	}
 
 	flight_data.close();
-	std::cout << "Data has been written to flight_info_data.txt" << std::endl;
+	std::cout << "Data has been written to flight_info_data.txt" << std::endl << std::endl;
 }
 
 void addFlightData()
@@ -156,10 +166,9 @@ void addFlightData()
 		std::cout << std::endl;
 	}
 
-	writeStructureToFile(new_flights, n);
-	std::cout << "Data added successfully! Press ENTER!";
+	writeFlightStructureToFile(new_flights, n);
 	delete[] new_flights;
-
+	std::cout << "Data added successfully!" << std::endl;
 	clear_console();
 }
 
@@ -176,7 +185,10 @@ void sortFlightData()
 	std::cout << "3. Sort by destination" << std::endl;
 
 	int sort_method;
+	std::cout << "Enter the number of the sorting method: ";
 	std::cin >> sort_method;
+
+	clear_console();
 
 	switch (sort_method)
 	{
@@ -202,12 +214,25 @@ void sortFlightData()
 		break;
 	}
 
-	/*for (int i = 0; i < numFlights; i++)
+	for (int i = 0; i < numFlights; i++)
 	{
 		const Flight& flight = sort_flight_data[i];
-		std::cout << std::setw(10) << flight.flight_number << std::setw(10) << flight.direction << std::setw(15) << sort_flight_data[i].time.year << "/" << sort_flight_data[i].time.month << "/" << sort_flight_data[i].time.day << " " << sort_flight_data[i].time.hour << ":" << sort_flight_data[i].time.min << std::setw(20) << flight.destination << std::setw(20) << flight.plane_model;
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(8) << flight.flight_number;
+		std::cout << std::setw(10) << flight.direction;
+
+		std::cout << std::setfill('0');
+		std::cout << std::right;
+		std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+		std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(20) << flight.destination;
+		std::cout << std::setw(15) << flight.plane_model;
 		std::cout << std::endl;
-	}*/
+	}
+
+	clear_console();
 
 }
 

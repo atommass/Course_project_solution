@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Functions.cpp">
+    <ClCompile Include="Flight_Functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DateAndTimeFunctions.cpp">
@@ -26,7 +26,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Functions.h">
+    <ClInclude Include="Flight_Functions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DataTypes.h">
@@ -35,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="flight_info_data.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="flight_info_data_backup.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

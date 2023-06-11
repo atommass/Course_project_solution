@@ -1,5 +1,5 @@
 #include "DataTypes.h"
-#include "Functions.h"
+#include "Flight_Functions.h"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -34,8 +34,37 @@ int main()
             addFlightData();
         }
         else if (main_menu_choice == 3) {
-            std::cout << "Select the sorting method: " << std::endl;
-            // Perform sorting action
+            std::cout << "Select data you want to sort:" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            std::cout << "3. Planes" << std::endl;
+
+            int sort_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> sort_choice;
+
+            clear_console();
+
+            if (sort_choice == 1)
+            {
+	            // Sort flight data
+                sortFlightData();
+            }
+            else if (sort_choice == 2)
+            {
+            	// Sort passengers
+			}
+			else if (sort_choice == 3)
+			{
+				// Sort planes
+			}
+			else
+			{
+				std::cout << "Invalid input!" << std::endl;
+	            clear_console();
+	            continue;
+			}
+            
         }
         else if (main_menu_choice == 4) {
             std::cout << "Select the search method: " << std::endl;

@@ -6,3 +6,4 @@
          552351         A      2023/05/16 12:36              Tallin          Airbus 737
          230051         D      2023/01/01 08:05              Moscow          Airbus 333
          111111         A      2023/02/13 06:05                Riga          Airbus 333
+     

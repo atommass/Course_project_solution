@@ -10,7 +10,8 @@ Flight::DateAndTime add_date_and_time();
 void readFlightDataFromFile(Flight flights[], int& numFlight);
 void viewFlightData();
 void addFlightData();
-void writeStructureToFile(Flight* flights, int n);
+void writeFlightStructureToFile(Flight* flights, int n);
+void sortFlightData();
 
 // Clear console
 void clear_console();
