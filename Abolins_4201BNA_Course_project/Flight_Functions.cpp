@@ -215,6 +215,22 @@ void createFlightDataFile(const std::string& sorted_file_name, const Flight* sor
 	}
 }
 
+// compare dates function
+
+bool compareFlightsByDate(const Flight& flight_1, const Flight& flight_2)
+{
+	// Compare flights based on their date and time
+	if (flight_1.time.year != flight_2.time.year)
+		return flight_1.time.year < flight_2.time.year;
+	if (flight_1.time.month != flight_2.time.month)
+		return flight_1.time.month < flight_2.time.month;
+	if (flight_1.time.day != flight_2.time.day)
+		return flight_1.time.day < flight_2.time.day;
+	if (flight_1.time.hour != flight_2.time.hour)
+		return flight_1.time.hour < flight_2.time.hour;
+	return flight_1.time.min < flight_2.time.min;
+}
+
 void sortFlightData()
 {
 	Flight sort_flight_data[MAX_FLIGHTS];
@@ -236,7 +252,7 @@ void sortFlightData()
 	{
 	case 1:
 		// Sort by flight number
-		std::cout << "Do you want to sort by ascending or descending order? (A/D): ";
+		std::cout << "Do you want to sort flight number by ascending or descending order? (A/D): ";
 		char sort_by_flight_number_option;
 		std::cin >> sort_by_flight_number_option;
 
@@ -276,6 +292,87 @@ void sortFlightData()
 		}
 		break;
 	case 2:
+		// Sort by date
+		std::cout << "Do you want to sort date and time by ascending or descending order? (A/D): ";
+		char sort_by_date_and_time_option;
+		std::cin >> sort_by_date_and_time_option;
+
+		if (sort_by_date_and_time_option == 'A' || sort_by_date_and_time_option == 'a')
+		{
+			for (int i = 0; i < numFlights; i++)
+			{
+				for (int j = i + 1; j < numFlights; j++)
+				{
+					if (compareFlightsByDate(sort_flight_data[i], sort_flight_data[j]))
+					{
+						Flight temp = sort_flight_data[i];
+						sort_flight_data[i] = sort_flight_data[j];
+						sort_flight_data[j] = temp;
+					}
+				}
+
+			}
+		}
+		else if (sort_by_date_and_time_option == 'D' || sort_by_date_and_time_option == 'd')
+		{
+			for (int i = 0; i < numFlights; i++)
+			{
+				for (int j = i + 1; j < numFlights; j++)
+				{
+					if (!compareFlightsByDate(sort_flight_data[i], sort_flight_data[j]))
+					{
+						Flight temp = sort_flight_data[i];
+						sort_flight_data[i] = sort_flight_data[j];
+						sort_flight_data[j] = temp;
+					}
+				}
+			}
+		}
+		else
+		{
+			std::cout << "Invalid input!" << std::endl;
+		}
+		break;
+
+	case 3:
+		// Sort by destination
+		std::cout << "Do you want to sort destination by ascending or descending order? (A/D): ";
+		char sort_by_destination_option;
+		std::cin >> sort_by_destination_option;
+
+		if (sort_by_destination_option == 'A' || sort_by_destination_option == 'a') {
+			for (int i = 0; i < numFlights - 1; i++)
+			{
+				for (int j = 0; j < numFlights - i - 1; j++)
+				{
+					if (sort_flight_data[j].destination > sort_flight_data[j + 1].destination)
+					{
+						Flight temp = sort_flight_data[j];
+						sort_flight_data[j] = sort_flight_data[j + 1];
+						sort_flight_data[j + 1] = temp;
+					}
+				}
+			}
+		}
+		else if (sort_by_destination_option == 'D' || sort_by_destination_option == 'd')
+		{
+			for (int i = 0; i < numFlights - 1; i++)
+			{
+				for (int j = 0; j < numFlights - i - 1; j++)
+				{
+					if (sort_flight_data[j].destination < sort_flight_data[j + 1].destination)
+					{
+						Flight temp = sort_flight_data[j];
+						sort_flight_data[j] = sort_flight_data[j + 1];
+						sort_flight_data[j + 1] = temp;
+					}
+				}
+			}
+		}
+		else
+		{
+			std::cout << "Invalid input!" << std::endl;
+		}
 		
 		break;
 	default:
