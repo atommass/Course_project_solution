@@ -4,3 +4,4 @@
          111131         A      2023/12/12 12:12           Stockholm          Boeing 777
          318868         D      2323/32/56 05:54             Vilnius          Airbus 333
          552351         A      2023/05/16 12:36              Tallin          Airbus 737
+         230051         D      2023/01/01 08:05              Moscow          Airbus 333

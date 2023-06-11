@@ -15,9 +15,15 @@ int numFlights = 0;
 std::mutex console_mutex;
 void clear_console()
 {
-	console_mutex.lock();
-	system("cls");
-	console_mutex.unlock();
+	std::cout << "Press ENTER to continue...";
+	std::cin.ignore();
+	if (std::cin.get() == '\n')
+	{
+		console_mutex.lock();
+		system("cls");
+		console_mutex.unlock();
+	}
+	
 }
 
 void readFlightDataFromFile(Flight flights[], int& numFlight)
@@ -47,7 +53,9 @@ void readFlightDataFromFile(Flight flights[], int& numFlight)
 		std::istringstream timeStream(timeString);
 		timeStream >> flight.time.hour >> delimiter >> flight.time.min;
 
-		iss >> flight.destination >> flight.plane_model;
+		iss >> flight.destination;
+
+		std::getline(iss, flight.plane_model);
 
 		flights[numFlights] = flight;
 		numFlights++;
@@ -61,7 +69,7 @@ void viewFlightData()
 	Flight existing_flights[MAX_FLIGHTS];
 
 	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
-	std::cout << std::setw(10) << "Flight no." << std::setw(15) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
 	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
 
 	readFlightDataFromFile(existing_flights, numFlights);
@@ -69,11 +77,20 @@ void viewFlightData()
 	for (int i = 0; i < numFlights; i++)
 	{
 		const Flight& flight = existing_flights[i];
-		std::cout << std::setw(10) << flight.flight_number << std::setw(10) << flight.direction << std::setw(15) << existing_flights[i].time.year << "/" << existing_flights[i].time.month << "/" << existing_flights[i].time.day << " " << existing_flights[i].time.hour << ":" << existing_flights[i].time.min << std::setw(20) << flight.destination << std::setw(20) << flight.plane_model;
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(8) << flight.flight_number;
+		std::cout << std::setw(10) << flight.direction;
+		
+		std::cout << std::setfill('0');
+		std::cout << std::right;
+		std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+		std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(20) << flight.destination;
+		std::cout << std::setw(15) << flight.plane_model;
 		std::cout << std::endl;
 	}
-
-	std::cout << std::endl << "Press ENTER to exit view mode.";
 
 	clear_console();
 }
@@ -192,7 +209,7 @@ void sortFlightData()
 		std::cout << std::endl;
 	}*/
 
-
-	
-
 }
+
+
+

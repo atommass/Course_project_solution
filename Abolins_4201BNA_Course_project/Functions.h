@@ -11,3 +11,6 @@ void readFlightDataFromFile(Flight flights[], int& numFlight);
 void viewFlightData();
 void addFlightData();
 void writeStructureToFile(Flight* flights, int n);
+
+// Clear console
+void clear_console();
