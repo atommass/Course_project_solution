@@ -26,15 +26,46 @@ int main()
 
         std::cout << "Enter your choice: ";
         std::cin >> main_menu_choice;
+        std::cout << std::endl << std::endl;
 
         if (main_menu_choice == 1) {
-            viewFlightData();
+
+           
+            std::cout << "Select data you want to view:" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            std::cout << "3. Planes" << std::endl;
+
+            int view_choice;
+            std::cout << "Enter your choice (1, 2 or 3): ";
+            std::cin >> view_choice;
+
+            clear_console();
+
+            if (view_choice == 1)
+				{
+					// View flight data
+					viewFlightData();
+				}
+            else if (view_choice == 2)
+				{
+					// View passengers
+				}
+            else if (view_choice == 3)
+				{
+					// View planes
+				}
+            else
+				{
+					std::cout << "Invalid input!" << std::endl;
+                    clear_console();
+				}
         }
         else if (main_menu_choice == 2) {
             addFlightData();
         }
         else if (main_menu_choice == 3) {
-            std::cout << "Select data you want to sort:" << std::endl;
+            std::cout << "Select data you want to sort (1, 2 or 3):" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
             std::cout << "3. Planes" << std::endl;

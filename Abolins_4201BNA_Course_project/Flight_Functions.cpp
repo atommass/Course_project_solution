@@ -16,7 +16,6 @@ std::mutex console_mutex;
 void clear_console()
 {
 	std::cout << "Press ENTER to continue...";
-	std::cin.ignore();
 	if (std::cin.get() == '\n')
 	{
 		console_mutex.lock();
@@ -172,6 +171,49 @@ void addFlightData()
 	clear_console();
 }
 
+// Sorting Functions
+
+void createFlightDataFile(const std::string& sorted_file_name, const Flight* sort_flight_data, int numFlights)
+{
+	std::cout << "Do you want to create a new text file with sorted flight data? (Y/N): ";
+	char create_file_option;
+	std::cin >> create_file_option;
+
+	if (create_file_option == 'Y' || create_file_option == 'y')
+	{
+		
+
+		std::ofstream output_file(sorted_file_name);
+
+		if (output_file.is_open())
+		{
+			// Write sorted flight data to the file
+			for (int i = 0; i < numFlights; i++)
+			{
+				const Flight& flight = sort_flight_data[i];
+				std::cout << std::setfill(' ');
+				output_file << std::setw(15) << flight.flight_number;
+				output_file << std::setw(10) << flight.direction;
+
+				std::cout << std::setfill('0');
+				output_file << "      " << std::setw(4) << flight.time.year << "/" << std::setw(2) << std::setfill('0') << flight.time.month << "/" << std::setw(2) << std::setfill('0') << flight.time.day;
+				output_file << " " << std::setw(2) << std::setfill('0') << flight.time.hour << ":" << std::setw(2) << std::setfill('0') << flight.time.min;
+
+				std::cout << std::setfill(' ');
+				output_file << std::setw(20) << std::setfill(' ') << flight.destination;
+				output_file << std::setw(20) << std::setfill(' ') << flight.plane_model;
+				output_file << std::endl;
+			}
+
+			output_file.close();
+			std::cout << "File created successfully." << std::endl;
+		}
+		else
+		{
+			std::cout << "Unable to create the file." << std::endl;
+		}
+	}
+}
 
 void sortFlightData()
 {
@@ -193,17 +235,44 @@ void sortFlightData()
 	switch (sort_method)
 	{
 	case 1:
-		for (int i = 0; i < numFlights; i++)
+		// Sort by flight number
+		std::cout << "Do you want to sort by ascending or descending order? (A/D): ";
+		char sort_by_flight_number_option;
+		std::cin >> sort_by_flight_number_option;
+
+		if (sort_by_flight_number_option == 'A' || sort_by_flight_number_option == 'a')
 		{
-			for (int j = i + 1; j < numFlights; j++)
+			for (int i = 0; i < numFlights; i++)
 			{
-				if (sort_flight_data[i].flight_number > sort_flight_data[j].flight_number)
+				for (int j = i + 1; j < numFlights; j++)
 				{
-					Flight temp = sort_flight_data[i];
-					sort_flight_data[i] = sort_flight_data[j];
-					sort_flight_data[j] = temp;
+					if (sort_flight_data[i].flight_number > sort_flight_data[j].flight_number)
+					{
+						Flight temp = sort_flight_data[i];
+						sort_flight_data[i] = sort_flight_data[j];
+						sort_flight_data[j] = temp;
+					}
 				}
 			}
+		}
+		else if (sort_by_flight_number_option == 'D' || sort_by_flight_number_option == 'd')
+		{
+			for (int i = 0; i < numFlights; i++)
+			{
+				for (int j = i + 1; j < numFlights; j++)
+				{
+					if (sort_flight_data[i].flight_number < sort_flight_data[j].flight_number)
+					{
+						Flight temp = sort_flight_data[i];
+						sort_flight_data[i] = sort_flight_data[j];
+						sort_flight_data[j] = temp;
+					}
+				}
+			}
+		}
+		else
+		{
+			std::cout << "Invalid input!" << std::endl;
 		}
 		break;
 	case 2:
@@ -231,6 +300,14 @@ void sortFlightData()
 		std::cout << std::setw(15) << flight.plane_model;
 		std::cout << std::endl;
 	}
+
+	std::string sorted_file_name;
+	std::cout << "Enter the file name: ";
+	std::getline(std::cin, sorted_file_name);
+	sorted_file_name += ".txt";
+
+	createFlightDataFile(sorted_file_name, sort_flight_data, numFlights);
+
 
 	clear_console();
 
