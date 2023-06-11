@@ -4,7 +4,7 @@
 
 struct Flight
 {
-	int flight_number;
+	int flight_number{};
 	std::string destination;
 	std::string direction;
 	struct DateAndTime
@@ -15,7 +15,7 @@ struct Flight
 		int hour;
 		int min;
 	};
-	DateAndTime time;
+	DateAndTime time{};
 	std::string plane_model;
 };
 

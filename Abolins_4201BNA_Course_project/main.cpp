@@ -98,12 +98,39 @@ int main()
             
         }
         else if (main_menu_choice == 4) {
-            std::cout << "Select the search method: " << std::endl;
-            // Perform search action
+            std::cout << "Select data you want to search in (1, 2 or 3):" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            std::cout << "3. Planes" << std::endl;
+
+            int search_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> search_choice;
+
+            clear_console();
+
+            if (search_choice == 1)
+            {
+                searchFlightData();
+            }
+            else if (search_choice == 2)
+            {
+            	// Search passengers
+			}
+			else if (search_choice == 3)
+			{
+				// Search planes
+			}
+			else
+			{
+				std::cout << "Invalid input!" << std::endl;
+				clear_console();
+				continue;
+			}
         }
         else if (main_menu_choice == 5) {
-            std::cout << "Select the filter method: " << std::endl;
-            // Perform filter action
+            clear_console();
+            filterFlightData();
         }
         else if (main_menu_choice == 6) {
             std::cout << "Select the delete method: " << std::endl;
@@ -133,10 +160,7 @@ int main()
 
 
 
-	//viewFlightData();
-
-	//addFlightData();
-
+	
 
 	return 0;
 }

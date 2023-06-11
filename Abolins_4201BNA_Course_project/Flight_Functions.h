@@ -12,6 +12,8 @@ void viewFlightData();
 void addFlightData();
 void writeFlightStructureToFile(Flight* flights, int n);
 void sortFlightData();
+void searchFlightData();
+void filterFlightData();
 
 // Clear console
 void clear_console();

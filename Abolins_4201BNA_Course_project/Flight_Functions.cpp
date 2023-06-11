@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <set>
 
 #include <cstdlib> // to use system("cls");
 #include <mutex> // mutual exclusion to prevent multiple threads from accessing shared resources at the same time
@@ -434,6 +435,395 @@ void sortFlightData()
 	sort_flight_data = nullptr;
 	
 }
+
+void searchFlightData()
+{
+	Flight* flight_data = new Flight[MAX_FLIGHTS];
+	readFlightDataFromFile(flight_data, numFlights);
+
+	std::cout << "Select the search method: " << std::endl;
+	std::cout << "1. Search by flight number" << std::endl;
+	std::cout << "2. Search by date" << std::endl;
+	std::cout << "3. Search by destination" << std::endl;
+
+	int search_method;
+	std::cout << "Enter the number of the search method: ";
+	std::cin >> search_method;
+
+	clear_console();
+
+	switch (search_method)
+	{
+	case 1:
+
+	{
+		int flight_number;
+		std::cout << "Enter the flight number to search: ";
+		std::cin >> flight_number;
+		std::cin.ignore();
+
+		bool found = false;
+
+		std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+		std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+		for (int i = 0; i < numFlights; i++)
+		{
+			if (flight_data[i].flight_number == flight_number)
+			{
+				found = true;
+				const Flight& flight = flight_data[i];
+				std::cout << std::setfill(' ');
+				std::cout << std::setw(8) << flight.flight_number;
+				std::cout << std::setw(10) << flight.direction;
+
+				std::cout << std::setfill('0');
+				std::cout << std::right;
+				std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+				std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+				std::cout << std::setfill(' ');
+				std::cout << std::setw(20) << flight.destination;
+				std::cout << std::setw(15) << flight.plane_model;
+				std::cout << std::endl;
+			}
+		}
+		
+		
+		if (!found)
+		{
+			std::cout << "Flight number not found!" << std::endl;
+		}
+		std::cout << std::endl;
+		clear_console();
+
+		break;
+	}
+	case 2:
+	{
+		int search_year, search_month, search_day;
+		std::cout << "Enter the date to search (YYYY MM DD): ";
+		std::cin >> search_year >> search_month >> search_day;
+		std::cin.ignore();
+
+		bool found = false;
+
+		std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+		std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+		for (int i = 0; i < numFlights; i++)
+		{
+			if (flight_data[i].time.year == search_year && flight_data[i].time.month == search_month && flight_data[i].time.day == search_day)
+			{
+				found = true;
+				const Flight& flight = flight_data[i];
+				std::cout << std::setfill(' ');
+				std::cout << std::setw(8) << flight.flight_number;
+				std::cout << std::setw(10) << flight.direction;
+
+				std::cout << std::setfill('0');
+				std::cout << std::right;
+				std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+				std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+				std::cout << std::setfill(' ');
+				std::cout << std::setw(20) << flight.destination;
+				std::cout << std::setw(15) << flight.plane_model;
+				std::cout << std::endl;
+			}
+		}
+
+		if (!found)
+		{
+			std::cout << "Flights not found for the given date!" << std::endl;
+		}
+		std::cout << std::endl;
+		clear_console();
+
+		break;
+	}
+	case 3:
+	{
+		std::string search_destination;
+		std::cout << "Enter the destination to search: ";
+		std::getline(std::cin, search_destination);
+
+		bool found = false;
+
+		std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+		std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+		for (int i = 0; i < numFlights; i++)
+		{
+			if (flight_data[i].destination == search_destination)
+			{
+				found = true;
+				const Flight& flight = flight_data[i];
+				std::cout << std::setfill(' ');
+				std::cout << std::setw(8) << flight.flight_number;
+				std::cout << std::setw(10) << flight.direction;
+
+				std::cout << std::setfill('0');
+				std::cout << std::right;
+				std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+				std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+				std::cout << std::setfill(' ');
+				std::cout << std::setw(20) << flight.destination;
+				std::cout << std::setw(15) << flight.plane_model;
+				std::cout << std::endl;
+			}
+		}
+
+		if (!found)
+		{
+			std::cout << "Flights not found for the given destination!" << std::endl;
+		}
+		std::cout << std::endl;
+		clear_console();
+		break;
+	}
+	default:
+		std::cout << "Invalid search method selected!" << std::endl;
+	}
+
+	delete[] flight_data;
+}
+
+// Filter function
+
+void createFilteredFlightDataFile(std::string file_name, const Flight* flight_data, int numFlights)
+{
+	std::ofstream file(file_name);
+
+	if (file.is_open())
+	{
+
+		for (int i = 0; i < numFlights; i++)
+		{
+			const Flight& flight = flight_data[i];
+
+			file << std::setfill(' ');
+			file << std::setw(8) << flight.flight_number;
+			file << std::setw(10) << flight.direction;
+
+			file << std::setfill('0');
+			file << std::right;
+			file << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+			file << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+			file << std::setfill(' ');
+			file << std::setw(20) << flight.destination;
+			file << std::setw(15) << flight.plane_model;
+			file << std::endl;
+		}
+
+		file.close();
+		std::cout << "File created successfully!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Error opening file!" << std::endl;
+	}
+}
+
+
+void filterFlightData()
+{
+	Flight* filter_flight_data = new Flight[MAX_FLIGHTS];
+	numFlights = 0;
+	int filter_flight_number_count = 0;
+	readFlightDataFromFile(filter_flight_data, numFlights);
+
+	std::cout << "Available filters:" << std::endl;
+	std::cout << "1. Flight Number" << std::endl;
+	std::cout << "2. Arrival/Departure" << std::endl;
+	std::cout << "3. Date" << std::endl;
+	std::cout << "4. Destination" << std::endl;
+	std::cout << "5. Plane Model" << std::endl;
+	std::cout << std::endl;
+
+	int filter_flight_number = 0;
+	std::string filter_direction = {};
+	int filter_year = 0, filter_month = 0, filter_day = 0;
+	std::string filter_destination = {};
+	std::string filter_plane_model = {};
+
+	const std::string filterOptions[5] = { "Flight Number", "Arrival/Departure", "Date", "Destination", "Plane Model" };
+
+	std::cout << "How many filters do you want to apply? " << std::endl;
+	int filter_count = 0;
+	std::cout << "Enter the count of filters (MAX 5 filters):";
+	std::cin >> filter_count;
+
+	std::cout << std::endl;
+
+	int* filterSelection = new int[filter_count];
+	std::set<int> selectedFilters;  // To keep track of selected filter numbers
+	
+	for (int i = 0; i < filter_count; i++)
+	{
+		std::cout << "Enter the filter number " << i + 1 << ": ";
+		int filter_input = 0;
+		while (true)
+		{
+			std::cin >> filter_input;
+			if (filter_input < 1 || filter_input > 5) {
+				std::cout << "Invalid filter number entered! Please enter a filter number from 1 to 5: ";
+			}
+			else if (selectedFilters.count(filter_input) > 0) {
+				std::cout << "The same filter number has already been entered! Please enter a different filter number: ";
+			}
+			else {
+				selectedFilters.insert(filter_input);
+				break;
+			}
+		}
+		filterSelection[i] = filter_input;
+
+	}
+
+	std::cout << std::endl;
+	std::cout << "Input necessary data for the selected filters belove!" << std::endl;
+	std::cout << "The selected filters are: " << std::endl;
+	for (int i = 0; i < filter_count; i++)
+	{
+		if (filterSelection[i] == 1)
+		{
+			std::cout << "Flight Number: ";
+			std::cin >> filter_flight_number;
+		}
+		else if (filterSelection[i] == 2)
+		{
+			std::cout << "Arrival/Departure (A/D): ";
+			std::cin >> filter_direction;
+		}
+		else if (filterSelection[i] == 3)
+		{
+			std::cout << "Date (YYYY MM DD): ";
+			std::cin >> filter_year >> filter_month >> filter_day;
+		}
+		else if (filterSelection[i] == 4)
+		{
+			std::cout << "Destination (City): ";
+			std::cin >> filter_destination;
+		}
+		else
+		{
+			std::cout << "Plane Model: ";
+			std::cin >> filter_plane_model;
+		}
+	}
+
+	bool found = false;
+
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+	for (int i = 0; i < numFlights; i++)
+	{
+		const Flight& flight = filter_flight_data[i];
+
+		// Check if the flight matches the selected filters
+		if ((filter_flight_number == 0 || flight.flight_number == filter_flight_number) &&
+			(filter_direction.empty() || flight.direction == filter_direction) &&
+			(filter_year == 0 || flight.time.year == filter_year) &&
+			(filter_month == 0 || flight.time.month == filter_month) &&
+			(filter_day == 0 || flight.time.day == filter_day) &&
+			(filter_destination.empty() || flight.destination == filter_destination) &&
+			(filter_plane_model.empty() || flight.plane_model == filter_plane_model))
+		{
+			found = true;
+			std::cout << std::setfill(' ');
+			std::cout << std::setw(8) << flight.flight_number;
+			std::cout << std::setw(10) << flight.direction;
+
+			std::cout << std::setfill('0');
+			std::cout << std::right;
+			std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+			std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+			std::cout << std::setfill(' ');
+			std::cout << std::setw(20) << flight.destination;
+			std::cout << std::setw(15) << flight.plane_model;
+			std::cout << std::endl;
+		}
+	}
+
+	if (!found)
+	{
+		std::cout << "No flights found matching the filter criteria!" << std::endl;
+	}
+
+	// <----------------------------------------------------------------------------------------------
+
+	int nextAvailableIndex = 0; // Index to track the next available position in the array
+
+	for (int i = 0; i < numFlights; i++)
+	{
+		const Flight& flight = filter_flight_data[i];
+
+		// Check if the flight matches the selected filters
+		if ((filter_flight_number == 0 || flight.flight_number == filter_flight_number) &&
+			(filter_direction.empty() || flight.direction == filter_direction) &&
+			(filter_year == 0 || flight.time.year == filter_year) &&
+			(filter_month == 0 || flight.time.month == filter_month) &&
+			(filter_day == 0 || flight.time.day == filter_day) &&
+			(filter_destination.empty() || flight.destination == filter_destination) &&
+			(filter_plane_model.empty() || flight.plane_model == filter_plane_model))
+		{
+			// Flight matches the filters, keep it in the array
+			filter_flight_data[nextAvailableIndex] = flight;
+			nextAvailableIndex++;
+			found = true;
+		}
+	}
+	// Update the number of flights to the new count
+	filter_flight_number_count = nextAvailableIndex;
+
+	// Copy the filtered flights back to the original array
+	numFlights = filter_flight_number_count;
+	for (int i = 0; i < filter_flight_number_count; i++) {
+		filter_flight_data[i] = filter_flight_data[i];
+	}
+	// <-------------------------------------------------------------------------------------------------------
+
+	std::cout << "Do you want to create a new text file with sorted flight data? (Y/N): ";
+	char create_file_option;
+	std::cin >> create_file_option;
+
+
+	if (create_file_option == 'Y' || create_file_option == 'y') {
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard the newline character from previous input
+
+		std::string filtered_file_name;
+		std::cout << "Enter the file name: ";
+		std::getline(std::cin, filtered_file_name);
+		filtered_file_name += ".txt";
+
+		createFilteredFlightDataFile(filtered_file_name, filter_flight_data, numFlights);
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
+	}
+	else
+	{
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
+	}
+
+	delete[] filter_flight_data;
+	delete[] filterSelection;
+	
+}
+	
+
+
 
 
 
