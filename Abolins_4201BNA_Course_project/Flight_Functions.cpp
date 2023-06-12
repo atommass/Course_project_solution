@@ -6,7 +6,7 @@
 #include <string>
 #include <set>
 
-#include <cstdlib> // to use system("cls");
+#include <cstdlib> // to use system("cls"), std::rename(), std::remove();
 #include <mutex> // mutual exclusion to prevent multiple threads from accessing shared resources at the same time
 
 // view Flight data
@@ -185,7 +185,7 @@ void addFlightData()
 
 void createFlightDataFile(const std::string& sorted_file_name, const Flight* sort_flight_data, int numFlights)
 {
-	numFlights = 0;
+	
 	std::ofstream output_file(sorted_file_name);
 
 	if (output_file.is_open())
@@ -982,4 +982,145 @@ void editFlightData()
 	}
 
 	delete[] edit_flight_data;
+}
+
+// Delete flight data
+
+void deleteSingleFlightData()
+{
+	
+	Flight* delete_flight_data = new Flight[MAX_FLIGHTS];
+	readFlightDataFromFile(delete_flight_data, numFlights);
+
+	if (numFlights == 0)
+	{
+		std::cout << "No flight data found!" << std::endl;
+		return;
+	}
+
+	std::cout << "Available flight data for deletion." << std::endl << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+	for (int i = 0; i < numFlights; i++)
+	{
+		const Flight& flight = delete_flight_data[i];
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(8) << flight.flight_number;
+		std::cout << std::setw(10) << flight.direction;
+
+		std::cout << std::setfill('0');
+		std::cout << std::right;
+		std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+		std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(20) << flight.destination;
+		std::cout << std::setw(20) << flight.plane_model;
+		std::cout << std::endl;
+
+	}
+
+	std::cout << "Enter the flight number you want to delete: ";
+	int flight_number;
+	std::cin >> flight_number;
+
+	clear_console();
+
+	int flight_index = -1;
+	for (int i = 0; i < numFlights; i++)
+	{
+		if (delete_flight_data[i].flight_number == flight_number)
+		{
+			flight_index = i;
+			break;
+		}
+	}
+
+	if (flight_index == -1)
+	{
+		std::cout << "Flight not found!" << std::endl;
+		delete[] delete_flight_data;
+		return;
+	}
+
+	std::cout << "Flight data before deleting:" << std::endl;
+
+	const Flight& flight = delete_flight_data[flight_index];
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+	// -----------------------------------------------------
+	std::cout << std::setfill(' ');
+	std::cout << std::setw(8) << flight.flight_number;
+	std::cout << std::setw(10) << flight.direction;
+
+	std::cout << std::setfill('0');
+	std::cout << std::right;
+	std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+	std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+	std::cout << std::setfill(' ');
+	std::cout << std::setw(20) << flight.destination;
+	std::cout << std::setw(15) << flight.plane_model;
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "Do you want to delete the selected flight data (Y/N): ";
+	char delete_choice;
+	std::cin >> delete_choice;
+
+	if (delete_choice == 'Y' || delete_choice == 'y') {
+		// Create a temporary file to store the flight data without the deleted entry
+		std::ofstream temp_file("temp_flight_info_data.txt", std::ios::out | std::ios::trunc);
+		if (!temp_file)
+		{
+			std::cerr << "Failed to create temporary file for writing!" << std::endl;
+			delete[] delete_flight_data;
+			return;
+		}
+
+		// Write flight data to the temporary file, excluding the deleted entry
+		for (int i = 0; i < numFlights; i++)
+		{
+			if (i != flight_index)
+			{
+				const Flight& flight = delete_flight_data[i];
+				temp_file << std::setfill(' ');
+				temp_file << std::setw(8) << flight.flight_number;
+				temp_file << std::setw(10) << flight.direction;
+
+				temp_file << std::setfill('0');
+				temp_file << std::right;
+				temp_file << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+				temp_file << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+				temp_file << std::setfill(' ');
+				temp_file << std::setw(20) << flight.destination;
+				temp_file << std::setw(15) << flight.plane_model;
+				temp_file << std::endl;
+			}
+		}
+
+		temp_file.close();
+
+		// Remove the original file
+		std::remove("flight_info_data.txt");
+
+		// Rename the temporary file to the original file name
+		std::rename("temp_flight_info_data.txt", "flight_info_data.txt");
+
+		std::cout << "Flight data deleted successfully!" << std::endl;
+	}
+	else
+	{
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
+	}
+
+	// -----------------------------------------------------
+
 }

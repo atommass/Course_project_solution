@@ -141,9 +141,61 @@ int main()
         }
 		else if (main_menu_choice == 7)
 		{
-			
-            std::cout << "Select the delete method: " << std::endl;
-            // Perform delete action
+            clear_console();
+			std::cout << "Select data you want to delete (1, 2 or 3):" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            std::cout << "3. Planes" << std::endl;
+
+            int delete_menu_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> delete_menu_choice;
+
+            if (delete_menu_choice == 1)
+            {
+                clear_console();
+                std::cout << "Select delete method: ";
+                std::cout << "1. Delete single flight data" << std::endl;
+                std::cout << "2. Delete all flight data" << std::endl;
+                std::cout << "3. Delete filtered flight data" << std::endl;
+                std::cout << "Enter your choice: ";
+                int delete_flight_data_choice;
+                std::cin >> delete_flight_data_choice;
+
+                if (delete_flight_data_choice == 1)
+                {
+                	deleteSingleFlightData();
+				}
+				else if (delete_flight_data_choice == 2)
+				{
+					//deleteAllFlightData();
+				}
+				else if (delete_flight_data_choice == 3)
+				{
+					//deleteFilteredFlightData();
+				}
+				else
+				{
+					std::cout << "Invalid input!" << std::endl;
+					clear_console();
+					continue;
+				}
+			}
+			else if (delete_menu_choice == 2)
+			{
+				// Delete passengers
+			}
+			else if (delete_menu_choice == 3)
+			{
+				// Delete planes
+			}
+			else
+			{
+				std::cout << "Invalid input!" << std::endl;
+				clear_console();
+				continue;
+			}
+
 		}
         else if (main_menu_choice == 8) {
             std::cout << "Are you sure you want to terminate the program? (Y/N): ";
