@@ -93,7 +93,7 @@ void viewFlightData()
 		std::cout << std::setw(20) << flight.destination;
 		std::cout << std::setw(15) << flight.plane_model;
 		std::cout << std::endl;
-		
+
 	}
 
 	std::cout << "Exit to MAIN MENU!" << std::endl;
@@ -144,7 +144,7 @@ void addFlightData()
 
 	Flight* new_flights = new Flight[n];
 
-	for (int i = 0; i < n; i++) 
+	for (int i = 0; i < n; i++)
 	{
 		std::cout << "Enter flight number: ";
 		std::cin >> new_flights[i].flight_number;
@@ -158,7 +158,7 @@ void addFlightData()
 			std::cout << "Enter Arrival date and time: " << std::endl;
 			new_flights[i].time = add_date_and_time();
 		}
-		else 
+		else
 		{
 			std::cout << "Enter Departure date and time: " << std::endl;
 			new_flights[i].time = add_date_and_time();
@@ -185,36 +185,36 @@ void addFlightData()
 
 void createFlightDataFile(const std::string& sorted_file_name, const Flight* sort_flight_data, int numFlights)
 {
-		numFlights = 0;
-		std::ofstream output_file(sorted_file_name);
+	numFlights = 0;
+	std::ofstream output_file(sorted_file_name);
 
-		if (output_file.is_open())
+	if (output_file.is_open())
+	{
+		// Write sorted flight data to the file
+		for (int i = 0; i < numFlights; i++)
 		{
-			// Write sorted flight data to the file
-			for (int i = 0; i < numFlights; i++)
-			{
-				const Flight& flight = sort_flight_data[i];
-				std::cout << std::setfill(' ');
-				output_file << std::setw(15) << flight.flight_number;
-				output_file << std::setw(10) << flight.direction;
+			const Flight& flight = sort_flight_data[i];
+			std::cout << std::setfill(' ');
+			output_file << std::setw(15) << flight.flight_number;
+			output_file << std::setw(10) << flight.direction;
 
-				std::cout << std::setfill('0');
-				output_file << "      " << std::setw(4) << flight.time.year << "/" << std::setw(2) << std::setfill('0') << flight.time.month << "/" << std::setw(2) << std::setfill('0') << flight.time.day;
-				output_file << " " << std::setw(2) << std::setfill('0') << flight.time.hour << ":" << std::setw(2) << std::setfill('0') << flight.time.min;
+			std::cout << std::setfill('0');
+			output_file << "      " << std::setw(4) << flight.time.year << "/" << std::setw(2) << std::setfill('0') << flight.time.month << "/" << std::setw(2) << std::setfill('0') << flight.time.day;
+			output_file << " " << std::setw(2) << std::setfill('0') << flight.time.hour << ":" << std::setw(2) << std::setfill('0') << flight.time.min;
 
-				std::cout << std::setfill(' ');
-				output_file << std::setw(20) << std::setfill(' ') << flight.destination;
-				output_file << std::setw(20) << std::setfill(' ') << flight.plane_model;
-				output_file << std::endl;
-			}
-
-			output_file.close();
-			std::cout << "File created successfully." << std::endl;
+			std::cout << std::setfill(' ');
+			output_file << std::setw(20) << std::setfill(' ') << flight.destination;
+			output_file << std::setw(20) << std::setfill(' ') << flight.plane_model;
+			output_file << std::endl;
 		}
-		else
-		{
-			std::cout << "Unable to create the file." << std::endl;
-		}
+
+		output_file.close();
+		std::cout << "File created successfully." << std::endl;
+	}
+	else
+	{
+		std::cout << "Unable to create the file." << std::endl;
+	}
 
 }
 
@@ -236,7 +236,7 @@ bool compareFlightsByDate(const Flight& flight_1, const Flight& flight_2)
 
 void sortFlightData()
 {
-	Flight *sort_flight_data = new Flight[MAX_FLIGHTS];
+	Flight* sort_flight_data = new Flight[MAX_FLIGHTS];
 
 	readFlightDataFromFile(sort_flight_data, numFlights);
 
@@ -374,7 +374,7 @@ void sortFlightData()
 					}
 				}
 			}
-			
+
 		}
 		else
 		{
@@ -403,9 +403,9 @@ void sortFlightData()
 		std::cout << std::setw(20) << flight.destination;
 		std::cout << std::setw(15) << flight.plane_model;
 		std::cout << std::endl;
-		
+
 	}
-	
+
 
 	std::cout << "Do you want to create a new text file with sorted flight data? (Y/N): ";
 	char create_file_option;
@@ -424,7 +424,8 @@ void sortFlightData()
 		std::cin.ignore();
 		std::cout << "Exit to MAIN MENU!" << std::endl;
 		clear_console();
-	} else
+	}
+	else
 	{
 		std::cin.ignore();
 		std::cout << "Exit to MAIN MENU!" << std::endl;
@@ -433,7 +434,7 @@ void sortFlightData()
 
 	delete[] sort_flight_data;
 	sort_flight_data = nullptr;
-	
+
 }
 
 void searchFlightData()
@@ -489,8 +490,8 @@ void searchFlightData()
 				std::cout << std::endl;
 			}
 		}
-		
-		
+
+
 		if (!found)
 		{
 			std::cout << "Flight number not found!" << std::endl;
@@ -663,7 +664,7 @@ void filterFlightData()
 
 	int* filterSelection = new int[filter_count];
 	std::set<int> selectedFilters;  // To keep track of selected filter numbers
-	
+
 	for (int i = 0; i < filter_count; i++)
 	{
 		std::cout << "Enter the filter number " << i + 1 << ": ";
@@ -759,8 +760,7 @@ void filterFlightData()
 		std::cout << "No flights found matching the filter criteria!" << std::endl;
 	}
 
-	// <----------------------------------------------------------------------------------------------
-
+	
 	int nextAvailableIndex = 0; // Index to track the next available position in the array
 
 	for (int i = 0; i < numFlights; i++)
@@ -790,8 +790,7 @@ void filterFlightData()
 	for (int i = 0; i < filter_flight_number_count; i++) {
 		filter_flight_data[i] = filter_flight_data[i];
 	}
-	// <-------------------------------------------------------------------------------------------------------
-
+	
 	std::cout << "Do you want to create a new text file with sorted flight data? (Y/N): ";
 	char create_file_option;
 	std::cin >> create_file_option;
@@ -819,15 +818,168 @@ void filterFlightData()
 
 	delete[] filter_flight_data;
 	delete[] filterSelection;
-	
+
 }
-	
 
+void editFlightData()
+{
+	numFlights = 0;
+	Flight* edit_flight_data = new Flight[MAX_FLIGHTS];
+	readFlightDataFromFile(edit_flight_data, numFlights);
+	std::cout << "Available flight data for editing." << std::endl << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
 
+	for (int i = 0; i < numFlights; i++)
+	{
+		const Flight& flight = edit_flight_data[i];
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(8) << flight.flight_number;
+		std::cout << std::setw(10) << flight.direction;
 
+		std::cout << std::setfill('0');
+		std::cout << std::right;
+		std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+		std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
 
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(20) << flight.destination;
+		std::cout << std::setw(20) << flight.plane_model;
+		std::cout << std::endl;
 
+	}
+	std::cout << std::endl;
+	int flight_number;
+	std::cout << "Enter the flight number you want to edit: ";
+	std::cin >> flight_number;
 
+	clear_console();
 
+	int flight_index = -1;
+	for (int i = 0; i < numFlights; i++)
+	{
+		if (edit_flight_data[i].flight_number == flight_number)
+		{
+			flight_index = i;
+			break;
+		}
+	}
 
+	if (flight_index == -1)
+	{
+		std::cout << "Flight not found!" << std::endl;
+		delete[] edit_flight_data;
+		return;
+	}
 
+	std::cout << "Flight data before editing:" << std::endl;
+	const Flight& flight = edit_flight_data[flight_index];
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setfill(' ');
+	std::cout << std::setw(8) << flight.flight_number;
+	std::cout << std::setw(10) << flight.direction;
+
+	std::cout << std::setfill('0');
+	std::cout << std::right;
+	std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+	std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+	std::cout << std::setfill(' ');
+	std::cout << std::setw(20) << flight.destination;
+	std::cout << std::setw(20) << flight.plane_model;
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "Do you want to edit the selected flight data (Y/N): ";
+	char edit_choice;
+	std::cin >> edit_choice;
+
+	if (edit_choice == 'Y' || edit_choice == 'y') {
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard the newline character from previous input
+
+		// New flight data input
+		std::cout << "Enter the new flight number: ";
+		std::cin >> edit_flight_data[flight_index].flight_number;
+		std::cin.ignore();
+
+		std::cout << "Enter the new direction (A/D): ";
+		std::getline(std::cin, edit_flight_data[flight_index].direction);
+
+		if (edit_flight_data[flight_index].direction == "A" || edit_flight_data[flight_index].direction == "a")
+		{
+			std::cout << "Enter new Arrival date and time: " << std::endl;
+			edit_flight_data[flight_index].time = add_date_and_time();
+		}
+		else
+		{
+			std::cout << "Enter new Departure date and time: " << std::endl;
+			edit_flight_data[flight_index].time = add_date_and_time();
+		}
+		std::cin.ignore();
+
+		std::cout << "Enter the new destination: ";
+		std::getline(std::cin, edit_flight_data[flight_index].destination);
+
+		std::cout << "Enter the new plane model: ";
+		std::getline(std::cin, edit_flight_data[flight_index].plane_model);
+
+		std::cout << std::endl;
+
+		std::cout << "Do you want to rewrite the data in the original file (Y/N): ";
+		char rewrite_choice;
+		std::cin >> rewrite_choice;
+
+		if (rewrite_choice == 'Y' || rewrite_choice == 'y') {
+			std::ofstream flight_data_file("flight_info_data.txt", std::ios::out | std::ios::trunc);
+
+			if (!flight_data_file)
+			{
+				std::cerr << "Failed to open the file for writing!" << std::endl;
+				delete[] edit_flight_data;
+				return;
+			}
+
+			// Write updated flight data to the file
+			
+			for (int i = 0; i < numFlights; i++)
+			{
+				const Flight& flight = edit_flight_data[i];
+				flight_data_file << std::setfill(' ');
+				flight_data_file << std::setw(8) << flight.flight_number;
+				flight_data_file << std::setw(10) << flight.direction;
+
+				flight_data_file << std::setfill('0');
+				flight_data_file << std::right;
+				flight_data_file << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+				flight_data_file << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+				flight_data_file << std::setfill(' ');
+				flight_data_file << std::setw(20) << flight.destination;
+				flight_data_file << std::setw(20) << flight.plane_model;
+				flight_data_file << std::endl;
+
+			}
+
+			flight_data_file.close();
+
+			std::cout << "Flight data updated and rewritten successfully!" << std::endl;
+		}
+		else {
+			std::cout << "Flight data updated successfully!" << std::endl;
+		}
+
+		clear_console();
+		
+	}
+	else
+	{
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
+	}
+
+	delete[] edit_flight_data;
+}

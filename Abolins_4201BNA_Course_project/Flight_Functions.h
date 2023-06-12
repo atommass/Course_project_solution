@@ -14,6 +14,7 @@ void writeFlightStructureToFile(Flight* flights, int n);
 void sortFlightData();
 void searchFlightData();
 void filterFlightData();
+void editFlightData();
 
 // Clear console
 void clear_console();

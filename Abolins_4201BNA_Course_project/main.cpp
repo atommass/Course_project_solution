@@ -21,8 +21,9 @@ int main()
         std::cout << "3. Sort Data" << std::endl;
         std::cout << "4. Search Data" << std::endl;
         std::cout << "5. Filter Data" << std::endl;
-        std::cout << "6. Delete Data" << std::endl;
-        std::cout << "7. Exit" << std::endl << std::endl;
+        std::cout << "6. Edit Data" << std::endl;
+        std::cout << "7. Delete Data" << std::endl;
+        std::cout << "8. Exit" << std::endl << std::endl;
 
         std::cout << "Enter your choice: ";
         std::cin >> main_menu_choice;
@@ -128,15 +129,23 @@ int main()
 				continue;
 			}
         }
-        else if (main_menu_choice == 5) {
+        else if (main_menu_choice == 5) 
+        {
             clear_console();
             filterFlightData();
         }
-        else if (main_menu_choice == 6) {
+        else if (main_menu_choice == 6) 
+        {
+            clear_console();
+            editFlightData();
+        }
+		else if (main_menu_choice == 7)
+		{
+			
             std::cout << "Select the delete method: " << std::endl;
             // Perform delete action
-        }
-        else if (main_menu_choice == 7) {
+		}
+        else if (main_menu_choice == 8) {
             std::cout << "Are you sure you want to terminate the program? (Y/N): ";
             std::string terminate_choice;
             std::cin >> terminate_choice;
