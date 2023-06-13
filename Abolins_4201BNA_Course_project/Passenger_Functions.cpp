@@ -642,6 +642,138 @@ void filterPassengerData()
 
 }
 
+void editPassengerData()
+{
+    passengerCount = 0;
+    Passenger* edit_passenger_data = new Passenger[MAX_PASSENGERS];
+    readPassengerDataFromFile(edit_passenger_data, passengerCount);
+    std::cout << "Available Passenger data for editing." << std::endl << std::endl;
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+    for (int i = 0; i < passengerCount; i++)
+    {
+        const Passenger& passenger = edit_passenger_data[i];
+        std::cout << std::setfill(' ');
+        std::cout << std::setw(12) << passenger.passenger_id;
+        std::cout << std::setw(15) << passenger.name;
+        std::cout << std::setw(15) << passenger.surname;
+        std::cout << std::setw(15) << passenger.flight_number;
+        std::cout << std::setw(15) << passenger.seat_number << std::endl;
+
+    }
+    std::cout << std::endl;
+    int passenger_number;
+    std::cout << "Enter the passenger ID number you want to edit: ";
+    std::cin >> passenger_number;
+
+    clear_console();
+
+    int passenger_index = -1;
+    for (int i = 0; i < passengerCount; i++)
+    {
+        if (edit_passenger_data[i].passenger_id == passenger_number)
+        {
+            passenger_index = i;
+            break;
+        }
+    }
+
+    if (passenger_index == -1)
+    {
+        std::cout << "Flight not found!" << std::endl;
+        delete[] edit_passenger_data;
+        return;
+    }
+
+    std::cout << "Passenger data before editing:" << std::endl;
+    const Passenger& passenger = edit_passenger_data[passenger_index];
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << std::setfill(' ');
+    std::cout << std::setw(12) << passenger.passenger_id;
+    std::cout << std::setw(15) << passenger.name;
+    std::cout << std::setw(15) << passenger.surname;
+    std::cout << std::setw(15) << passenger.flight_number;
+    std::cout << std::setw(15) << passenger.seat_number << std::endl;
+
+    std::cout << "Do you want to edit the selected passenger data (Y/N): ";
+    char edit_choice;
+    std::cin >> edit_choice;
+
+    if (edit_choice == 'Y' || edit_choice == 'y') {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard the newline character from previous input
+
+        // New flight data input
+    	std::cout << "Enter passenger ID: ";
+        std::cin >> edit_passenger_data[passenger_index].passenger_id;
+        std::cin.ignore();
+
+        std::cout << "Enter passenger name: ";
+        std::getline(std::cin, edit_passenger_data[passenger_index].name);
+
+        std::cout << "Enter passenger surname: ";
+        std::getline(std::cin, edit_passenger_data[passenger_index].surname);
+
+        std::cout << "Enter flight number: ";
+        std::cin >> edit_passenger_data[passenger_index].flight_number;
+        std::cin.ignore();
+
+        std::cout << "Enter seat number: ";
+        std::getline(std::cin, edit_passenger_data[passenger_index].seat_number);
+
+        std::cout << std::endl;
+
+        std::cout << "Do you want to rewrite the data in the original file (Y/N): ";
+        char rewrite_choice;
+        std::cin >> rewrite_choice;
+
+        if (rewrite_choice == 'Y' || rewrite_choice == 'y') {
+            std::ofstream passenger_data_file("passenger_info_data.txt", std::ios::out | std::ios::trunc);
+
+            if (!passenger_data_file)
+            {
+                std::cerr << "Failed to open the file for writing!" << std::endl;
+                delete[] edit_passenger_data;
+                return;
+            }
+
+            // Write updated flight data to the file
+
+            for (int i = 0; i < passengerCount; i++)
+            {
+                const Passenger& passenger = edit_passenger_data[i];
+                passenger_data_file << std::setfill(' ');
+                passenger_data_file << std::setw(12) << passenger.passenger_id;
+                passenger_data_file << std::setw(15) << passenger.name;
+            	passenger_data_file << std::setw(15) << passenger.surname;
+				passenger_data_file << std::setw(15) << passenger.flight_number;
+				passenger_data_file << std::setw(15) << passenger.seat_number << std::endl;
+
+            }
+
+            passenger_data_file.close();
+
+            std::cout << "Passenger data updated and rewritten successfully!" << std::endl;
+        }
+        else {
+            std::cout << "Passenger data updated successfully!" << std::endl;
+        }
+
+        clear_console();
+
+    }
+    else
+    {
+        std::cin.ignore();
+        std::cout << "Exit to MAIN MENU!" << std::endl;
+        clear_console();
+    }
+
+    delete[] edit_passenger_data;
+}
 
 
 

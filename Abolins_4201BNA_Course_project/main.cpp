@@ -37,37 +37,31 @@ int main()
             std::cout << "Select data you want to view:" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
-            std::cout << "3. Planes" << std::endl;
-
+            
             int view_choice;
-            std::cout << "Enter your choice (1, 2 or 3): ";
+            std::cout << "Enter your choice (1 or 2): ";
             std::cin >> view_choice;
 
             clear_console();
 
             if (view_choice == 1)
-				{
-					viewFlightData();
-				}
+            {
+				viewFlightData();
+			}
             else if (view_choice == 2)
-				{
-					viewPassengerData();
-				}
-            else if (view_choice == 3)
-				{
-					// View planes
-				}
+			{
+				viewPassengerData();
+			}
             else
-				{
-					std::cout << "Invalid input!" << std::endl;
-                    clear_console();
-				}
+			{
+				std::cout << "Invalid input!" << std::endl;
+                clear_console();
+			}
         }
         else if (main_menu_choice == 2) {
             std::cout << "Select data you want to add:" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
-            std::cout << "3. Planes" << std::endl;
 
             int add_choice;
             std::cout << "Enter your choice: ";
@@ -82,10 +76,6 @@ int main()
             {
                 addPassengerData();
             }
-            else if (add_choice == 3)
-            {
-
-			}
 			else
 			{
 				std::cout << "Invalid input!" << std::endl;
@@ -95,10 +85,9 @@ int main()
         	
         }
         else if (main_menu_choice == 3) {
-            std::cout << "Select data you want to sort (1, 2 or 3):" << std::endl;
+            std::cout << "Select data you want to sort (1 or 2):" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
-            std::cout << "3. Planes" << std::endl;
 
             int sort_choice;
             std::cout << "Enter your choice: ";
@@ -114,10 +103,6 @@ int main()
             {
             	sortPassengerData();
 			}
-			else if (sort_choice == 3)
-			{
-				// Sort planes
-			}
 			else
 			{
 				std::cout << "Invalid input!" << std::endl;
@@ -127,10 +112,9 @@ int main()
             
         }
         else if (main_menu_choice == 4) {
-            std::cout << "Select data you want to search in (1, 2 or 3):" << std::endl;
+            std::cout << "Select data you want to search in (1 or 2):" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
-            std::cout << "3. Planes" << std::endl;
 
             int search_choice;
             std::cout << "Enter your choice: ";
@@ -146,10 +130,6 @@ int main()
             {
                 searchPassengerData();
 			}
-			else if (search_choice == 3)
-			{
-				// Search planes
-			}
 			else
 			{
 				std::cout << "Invalid input!" << std::endl;
@@ -159,11 +139,10 @@ int main()
         }
         else if (main_menu_choice == 5) 
         {
-            std::cout << "Select data you want to filter (1, 2 or 3):" << std::endl;
+            std::cout << "Select data you want to filter (1 or 2):" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
-            std::cout << "3. Planes" << std::endl;
-
+           
             int filter_choice;
             std::cout << "Enter your choice: ";
             std::cin >> filter_choice;
@@ -177,33 +156,48 @@ int main()
 			{
 				filterPassengerData();
 			}
-            else if (filter_choice == 3)
-            {
-            	// Filter planes
-            }
-			else
+            else
 			{
 				std::cout << "Invalid input!" << std::endl;
 	            clear_console();
 	            continue;
 			}
-
-
-        	
         }
         else if (main_menu_choice == 6) 
         {
+            std::cout << "Select data you want to edit (1 or 2):" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            
+            int edit_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> edit_choice;
+
             clear_console();
-            editFlightData();
+
+            if (edit_choice == 1)
+            {
+            	editFlightData();
+			}
+			else if (edit_choice == 2)
+			{
+				editPassengerData();
+			}
+            else
+            {
+            	std::cout << "Invalid input!" << std::endl;
+				clear_console();
+				continue;
+            }
+            
         }
 		else if (main_menu_choice == 7)
 		{
             clear_console();
-			std::cout << "Select data you want to delete (1, 2 or 3):" << std::endl;
+			std::cout << "Select data you want to delete (1 or 2):" << std::endl;
             std::cout << "1. Flight data" << std::endl;
             std::cout << "2. Passengers" << std::endl;
-            std::cout << "3. Planes" << std::endl;
-
+            
             int delete_menu_choice;
             std::cout << "Enter your choice: ";
             std::cin >> delete_menu_choice;
@@ -244,10 +238,6 @@ int main()
 			else if (delete_menu_choice == 2)
 			{
 				// Delete passengers
-			}
-			else if (delete_menu_choice == 3)
-			{
-				// Delete planes
 			}
 			else
 			{

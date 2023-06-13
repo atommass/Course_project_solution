@@ -27,9 +27,3 @@ struct Passenger
 	int flight_number{};
 	std::string seat_number;
 };
-
-struct Plane
-{
-	std::string manufacturer;
-	std::string plane_model;
-};
