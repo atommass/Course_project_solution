@@ -141,6 +141,7 @@
     <Text Include="flight_info_data.txt" />
     <Text Include="flight_info_data_backup.txt" />
     <Text Include="passenger_info_data.txt" />
+    <Text Include="passenger_info_data_backup.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -82,7 +82,7 @@ int main()
             }
             else if (add_choice == 2) 
             {
-
+                addPassengerData();
             }
             else if (add_choice == 3)
             {
@@ -116,6 +116,7 @@ int main()
             else if (sort_choice == 2)
             {
             	// Sort passengers
+                sortPassengerData();
 			}
 			else if (sort_choice == 3)
 			{
