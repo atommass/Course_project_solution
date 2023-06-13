@@ -9,6 +9,7 @@
 #include <cstdlib> // to use system("cls"), std::rename(), std::remove();
 #include <mutex> // mutual exclusion to prevent multiple threads from accessing shared resources at the same time
 
+
 // view Flight data
 constexpr int MAX_FLIGHTS = 100;
 int numFlights = 0;
@@ -91,7 +92,7 @@ void viewFlightData()
 
 		std::cout << std::setfill(' ');
 		std::cout << std::setw(20) << flight.destination;
-		std::cout << std::setw(15) << flight.plane_model;
+		std::cout << std::setw(20) << flight.plane_model;
 		std::cout << std::endl;
 
 	}
@@ -1107,10 +1108,22 @@ void deleteSingleFlightData()
 		temp_file.close();
 
 		// Remove the original file
-		std::remove("flight_info_data.txt");
+		if (std::remove("flight_info_data.txt") != 0)
+		{
+			std::cerr << "Failed to remove the original file!" << std::endl;
+			// Handle the error as needed
+			delete[] delete_flight_data;
+			return;
+		}
 
 		// Rename the temporary file to the original file name
-		std::rename("temp_flight_info_data.txt", "flight_info_data.txt");
+		if (std::rename("temp_flight_info_data.txt", "flight_info_data.txt") != 0)
+		{
+			std::cerr << "Failed to rename the file!" << std::endl;
+			// Handle the error as needed
+			delete[] delete_flight_data;
+			return;
+		}
 
 		std::cout << "Flight data deleted successfully!" << std::endl;
 	}
@@ -1121,6 +1134,276 @@ void deleteSingleFlightData()
 		clear_console();
 	}
 
-	// -----------------------------------------------------
+	delete[] delete_flight_data;
+
+	clear_console();
+}
+
+void deleteAllFlightData()
+{
+	if (std::remove("flight_info_data.txt") != 0)
+	{
+		std::cerr << "Failed to remove the original file!" << std::endl;
+		return;
+	}
+
+	// Rename the temporary file to the original file name
+	std::ifstream temp_file("temp_flight_info_data.txt", std::ios::in);
+	std::ofstream original_file("flight_info_data.txt", std::ios::out | std::ios::trunc);
+
+	if (!temp_file || !original_file)
+	{
+		std::cerr << "Failed to rename the file!" << std::endl;
+		return;
+	}
+
+	original_file << temp_file.rdbuf();
+
+	temp_file.close();
+	original_file.close();
+
+	// Delete the temporary file
+	if (std::remove("temp_flight_info_data.txt") != 0)
+	{
+		std::cerr << "Failed to delete the temporary file!" << std::endl;
+		return;
+	}
+
+	std::cout << "Flight data deleted successfully!" << std::endl;
+	clear_console();
+}
+
+void deleteFilteredFlightData()
+{
+	// using filterFlightData() function to retrieve the filtered data, then delete them
+	Flight* filter_for_delete_flight_data = new Flight[MAX_FLIGHTS];
+	numFlights = 0;
+	int filter_delete_flight_number_count = 0;
+	readFlightDataFromFile(filter_for_delete_flight_data, numFlights);
+
+	std::cout << "Available filters:" << std::endl;
+	std::cout << "1. Flight Number" << std::endl;
+	std::cout << "2. Arrival/Departure" << std::endl;
+	std::cout << "3. Date" << std::endl;
+	std::cout << "4. Destination" << std::endl;
+	std::cout << "5. Plane Model" << std::endl;
+	std::cout << std::endl;
+
+	int filter_delete_flight_number = 0;
+	std::string filter_delete_direction = {};
+	int filter_delete_year = 0, filter_delete_month = 0, filter_delete_day = 0;
+	std::string filter_delete_destination = {};
+	std::string filter_delete_plane_model = {};
+
+	const std::string filter_options[5] = { "Flight Number", "Arrival/Departure", "Date", "Destination", "Plane Model" };
+
+	std::cout << "How many filters do you want to apply? " << std::endl;
+	int filter_count = 0;
+	std::cout << "Enter the count of filters (MAX 5 filters):";
+	std::cin >> filter_count;
+
+	std::cout << std::endl;
+
+	int* filter_delete_selection = new int[filter_count];
+	std::set<int> selectedFilters;  // To keep track of selected filter numbers
+
+	for (int i = 0; i < filter_count; i++)
+	{
+		std::cout << "Enter the filter number " << i + 1 << ": ";
+		int filter_delete_input = 0;
+		while (true)
+		{
+			std::cin >> filter_delete_input;
+			if (filter_delete_input < 1 || filter_delete_input > 5) {
+				std::cout << "Invalid filter number entered! Please enter a filter number from 1 to 5: ";
+			}
+			else if (selectedFilters.count(filter_delete_input) > 0) {
+				std::cout << "The same filter number has already been entered! Please enter a different filter number: ";
+			}
+			else {
+				selectedFilters.insert(filter_delete_input);
+				break;
+			}
+		}
+		filter_delete_selection[i] = filter_delete_input;
+
+	}
+
+	std::cout << std::endl;
+	std::cout << "Input necessary data for the selected filters belove!" << std::endl;
+	std::cout << "The selected filters are: " << std::endl;
+	for (int i = 0; i < filter_count; i++)
+	{
+		if (filter_delete_selection[i] == 1)
+		{
+			std::cout << "Flight Number: ";
+			std::cin >> filter_delete_flight_number;
+		}
+		else if (filter_delete_selection[i] == 2)
+		{
+			std::cout << "Arrival/Departure (A/D): ";
+			std::cin >> filter_delete_direction;
+		}
+		else if (filter_delete_selection[i] == 3)
+		{
+			std::cout << "Date (YYYY MM DD): ";
+			std::cin >> filter_delete_year >> filter_delete_month >> filter_delete_day;
+		}
+		else if (filter_delete_selection[i] == 4)
+		{
+			std::cout << "Destination (City): ";
+			std::cin >> filter_delete_destination;
+		}
+		else
+		{
+			std::cout << "Plane Model: ";
+			std::cin >> filter_delete_plane_model;
+		}
+	}
+
+	bool found = false;
+
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+	for (int i = 0; i < numFlights; i++)
+	{
+		const Flight& flight = filter_for_delete_flight_data[i];
+
+		// Check if the flight matches the selected filters
+		if ((filter_delete_flight_number == 0 || flight.flight_number == filter_delete_flight_number) &&
+			(filter_delete_direction.empty() || flight.direction == filter_delete_direction) &&
+			(filter_delete_year == 0 || flight.time.year == filter_delete_year) &&
+			(filter_delete_month == 0 || flight.time.month == filter_delete_month) &&
+			(filter_delete_day == 0 || flight.time.day == filter_delete_day) &&
+			(filter_delete_destination.empty() || flight.destination == filter_delete_destination) &&
+			(filter_delete_plane_model.empty() || flight.plane_model == filter_delete_plane_model))
+		{
+			found = true;
+			std::cout << std::setfill(' ');
+			std::cout << std::setw(8) << flight.flight_number;
+			std::cout << std::setw(10) << flight.direction;
+
+			std::cout << std::setfill('0');
+			std::cout << std::right;
+			std::cout << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+			std::cout << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+			std::cout << std::setfill(' ');
+			std::cout << std::setw(20) << flight.destination;
+			std::cout << std::setw(15) << flight.plane_model;
+			std::cout << std::endl;
+		}
+	}
+
+	int flight_index = -1;
+	for (int i = 0; i < numFlights; i++)
+	{
+		if (filter_for_delete_flight_data[i].flight_number == filter_delete_flight_number)
+		{
+			flight_index = i;
+			break;
+		}
+	}
+
+	if (!found)
+	{
+		std::cout << "No flights found matching the filter criteria!" << std::endl;
+	}
+	int nextAvailableIndex = 0; // Index to track the next available position in the array
+
+	for (int i = 0; i < numFlights; i++)
+	{
+		const Flight& flight = filter_for_delete_flight_data[i];
+
+		// Check if the flight matches the selected filters
+		if ((filter_delete_flight_number == 0 || flight.flight_number == filter_delete_flight_number) &&
+			(filter_delete_direction.empty() || flight.direction == filter_delete_direction) &&
+			(filter_delete_year == 0 || flight.time.year == filter_delete_year) &&
+			(filter_delete_month == 0 || flight.time.month == filter_delete_month) &&
+			(filter_delete_day == 0 || flight.time.day == filter_delete_day) &&
+			(filter_delete_destination.empty() || flight.destination == filter_delete_destination) &&
+			(filter_delete_plane_model.empty() || flight.plane_model == filter_delete_plane_model))
+		{
+			// Flight matches the filters, keep it in the array
+			filter_for_delete_flight_data[nextAvailableIndex] = flight;
+			nextAvailableIndex++;
+			found = true;
+		}
+	}
+	// Update the number of flights to the new count
+	filter_delete_flight_number_count = nextAvailableIndex;
+
+	// Copy the filtered flights back to the original array
+	numFlights = filter_delete_flight_number_count;
+	for (int i = 0; i < filter_delete_flight_number_count; i++) {
+		filter_for_delete_flight_data[i] = filter_for_delete_flight_data[i];
+	}
+
+	std::cout << "Do you want to delete all the flights that match the selected filters? (Y/N): ";
+	char filter_delete_confirm;
+	std::cin >> filter_delete_confirm;
+
+	if (filter_delete_confirm == 'Y' || filter_delete_confirm == 'y')
+	{
+		// Create a temporary file to store the flight data without the deleted entry
+		std::ofstream temp_file("temp_flight_info_data.txt", std::ios::out | std::ios::trunc);
+		if (!temp_file)
+		{
+			std::cerr << "Failed to create temporary file for writing!" << std::endl;
+			delete[] filter_for_delete_flight_data;
+			return;
+		}
+
+		// Write flight data to the temporary file, excluding the deleted entry
+		for (int i = 0; i < numFlights; i++)
+		{
+			if (i != flight_index)
+			{
+				const Flight& flight = filter_for_delete_flight_data[i];
+				temp_file << std::setfill(' ');
+				temp_file << std::setw(8) << flight.flight_number;
+				temp_file << std::setw(10) << flight.direction;
+
+				temp_file << std::setfill('0');
+				temp_file << std::right;
+				temp_file << "          " << std::setw(4) << flight.time.year << "/" << std::setw(2) << flight.time.month << "/" << std::setw(2) << flight.time.day;
+				temp_file << " " << std::setw(2) << flight.time.hour << ":" << std::setw(2) << flight.time.min;
+
+				temp_file << std::setfill(' ');
+				temp_file << std::setw(20) << flight.destination;
+				temp_file << std::setw(15) << flight.plane_model;
+				temp_file << std::endl;
+			}
+		}
+
+		temp_file.close();
+
+		// Remove the original file
+		if (std::remove("flight_info_data.txt") != 0)
+		{
+			std::cerr << "Failed to remove the original file!" << std::endl;
+			// Handle the error as needed
+			delete[] filter_for_delete_flight_data;
+			return;
+		}
+
+		// Rename the temporary file to the original file name
+		if (std::rename("temp_flight_info_data.txt", "flight_info_data.txt") != 0)
+		{
+			std::cerr << "Failed to rename the file!" << std::endl;
+			// Handle the error as needed
+			delete[] filter_for_delete_flight_data;
+			return;
+		}
+		std::cout << "All the flights that match the selected filters have been deleted!" << std::endl;
+	}
+	else
+	{
+		std::cout << "No flights have been deleted!" << std::endl;
+	}
+
 
 }
+ 

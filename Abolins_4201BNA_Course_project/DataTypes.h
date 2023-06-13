@@ -21,10 +21,10 @@ struct Flight
 
 struct Passenger
 {
-	int passenger_id;
+	int passenger_id{};
 	std::string name;
 	std::string surname;
-	int flight_number;
+	int flight_number{};
 	std::string seat_number;
 };
 

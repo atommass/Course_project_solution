@@ -1,5 +1,6 @@
 #include "DataTypes.h"
 #include "Flight_Functions.h"
+#include "Passenger_Functions.h"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -23,7 +24,8 @@ int main()
         std::cout << "5. Filter Data" << std::endl;
         std::cout << "6. Edit Data" << std::endl;
         std::cout << "7. Delete Data" << std::endl;
-        std::cout << "8. Exit" << std::endl << std::endl;
+        std::cout << "8. Additional Options" << std::endl;
+        std::cout << "9. Exit" << std::endl << std::endl;
 
         std::cout << "Enter your choice: ";
         std::cin >> main_menu_choice;
@@ -51,6 +53,7 @@ int main()
             else if (view_choice == 2)
 				{
 					// View passengers
+					viewPassengerData();
 				}
             else if (view_choice == 3)
 				{
@@ -63,7 +66,35 @@ int main()
 				}
         }
         else if (main_menu_choice == 2) {
-            addFlightData();
+            std::cout << "Select data you want to add:" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            std::cout << "3. Planes" << std::endl;
+
+            int add_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> add_choice;
+
+            clear_console();
+            if (add_choice == 1)
+            {
+                addFlightData();
+            }
+            else if (add_choice == 2) 
+            {
+
+            }
+            else if (add_choice == 3)
+            {
+
+			}
+			else
+			{
+				std::cout << "Invalid input!" << std::endl;
+				clear_console();
+				continue;
+			}
+        	
         }
         else if (main_menu_choice == 3) {
             std::cout << "Select data you want to sort (1, 2 or 3):" << std::endl;
@@ -154,7 +185,7 @@ int main()
             if (delete_menu_choice == 1)
             {
                 clear_console();
-                std::cout << "Select delete method: ";
+                std::cout << "Select delete method: " << std::endl;
                 std::cout << "1. Delete single flight data" << std::endl;
                 std::cout << "2. Delete all flight data" << std::endl;
                 std::cout << "3. Delete filtered flight data" << std::endl;
@@ -164,15 +195,18 @@ int main()
 
                 if (delete_flight_data_choice == 1)
                 {
+                    clear_console();
                 	deleteSingleFlightData();
 				}
 				else if (delete_flight_data_choice == 2)
 				{
-					//deleteAllFlightData();
+                    clear_console();
+					deleteAllFlightData();
 				}
 				else if (delete_flight_data_choice == 3)
 				{
-					//deleteFilteredFlightData();
+					clear_console();
+					deleteFilteredFlightData();
 				}
 				else
 				{
@@ -197,7 +231,12 @@ int main()
 			}
 
 		}
-        else if (main_menu_choice == 8) {
+        else if (main_menu_choice == 8)
+        {
+            // Additional features
+
+		}
+        else if (main_menu_choice == 9) {
             std::cout << "Are you sure you want to terminate the program? (Y/N): ";
             std::string terminate_choice;
             std::cin >> terminate_choice;

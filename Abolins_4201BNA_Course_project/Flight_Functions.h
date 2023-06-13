@@ -16,6 +16,8 @@ void searchFlightData();
 void filterFlightData();
 void editFlightData();
 void deleteSingleFlightData();
+void deleteAllFlightData();
+void deleteFilteredFlightData();
 
 // Clear console
 void clear_console();
