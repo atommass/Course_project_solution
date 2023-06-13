@@ -47,12 +47,10 @@ int main()
 
             if (view_choice == 1)
 				{
-					// View flight data
 					viewFlightData();
 				}
             else if (view_choice == 2)
 				{
-					// View passengers
 					viewPassengerData();
 				}
             else if (view_choice == 3)
@@ -110,13 +108,11 @@ int main()
 
             if (sort_choice == 1)
             {
-	            // Sort flight data
-                sortFlightData();
+	           sortFlightData();
             }
             else if (sort_choice == 2)
             {
-            	// Sort passengers
-                sortPassengerData();
+            	sortPassengerData();
 			}
 			else if (sort_choice == 3)
 			{
@@ -148,7 +144,7 @@ int main()
             }
             else if (search_choice == 2)
             {
-            	// Search passengers
+                searchPassengerData();
 			}
 			else if (search_choice == 3)
 			{
@@ -163,8 +159,37 @@ int main()
         }
         else if (main_menu_choice == 5) 
         {
+            std::cout << "Select data you want to filter (1, 2 or 3):" << std::endl;
+            std::cout << "1. Flight data" << std::endl;
+            std::cout << "2. Passengers" << std::endl;
+            std::cout << "3. Planes" << std::endl;
+
+            int filter_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> filter_choice;
+
             clear_console();
-            filterFlightData();
+            if (filter_choice == 1)
+            {
+            	filterFlightData();
+			}
+			else if (filter_choice == 2)
+			{
+				filterPassengerData();
+			}
+            else if (filter_choice == 3)
+            {
+            	// Filter planes
+            }
+			else
+			{
+				std::cout << "Invalid input!" << std::endl;
+	            clear_console();
+	            continue;
+			}
+
+
+        	
         }
         else if (main_menu_choice == 6) 
         {

@@ -11,6 +11,8 @@ void addPassengerData();
 void writePassengerStructureToFile(Passenger* passengers, int n);
 void createPassengerDataFile(const std::string& sorted_file_name, const Passenger* sorted_passenger_data, int numPassengers);
 void sortPassengerData();
+void searchPassengerData();
+void filterPassengerData();
 
 
 

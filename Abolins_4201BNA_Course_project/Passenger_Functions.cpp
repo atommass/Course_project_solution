@@ -352,3 +352,296 @@ void sortPassengerData()
     delete[] sort_passenger_data;
     sort_passenger_data = nullptr;
 }
+
+void searchPassengerData()
+{
+    Passenger* search_passenger_data = new Passenger[MAX_PASSENGERS];
+    readPassengerDataFromFile(search_passenger_data, passengerCount);
+
+    std::cout << "Select the search method: " << std::endl;
+    std::cout << "1. Search by Passenger ID" << std::endl;
+    std::cout << "2. Search by name" << std::endl;
+    std::cout << "3. Search by surname" << std::endl;
+
+    int search_method;
+    std::cout << "Enter the number of the search method: ";
+    std::cin >> search_method;
+    std::cin.ignore(); // Ignore the newline character left in the input stream
+
+    std::cout << std::endl;
+
+    switch (search_method)
+    {
+    case 1:
+    {
+        // Search by Passenger ID
+        int passenger_id;
+        std::cout << "Enter the passenger ID to search: ";
+        std::cin >> passenger_id;
+        std::cin.ignore(); // Ignore the newline character left in the input stream
+
+        bool found = false;
+
+        std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+        std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+        std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+        for (int i = 0; i < passengerCount; i++)
+        {
+            if (search_passenger_data[i].passenger_id == passenger_id)
+            {
+                found = true;
+                const Passenger& passenger = search_passenger_data[i];
+                std::cout << std::setfill(' ');
+                std::cout << std::setw(12) << passenger.passenger_id;
+                std::cout << std::setw(15) << passenger.name;
+                std::cout << std::setw(15) << passenger.surname;
+                std::cout << std::setw(15) << passenger.flight_number;
+                std::cout << std::setw(15) << passenger.seat_number << std::endl;
+            }
+        }
+
+        if (!found)
+        {
+            std::cout << "Passenger ID not found!" << std::endl;
+        }
+        break;
+    }
+    case 2:
+    {
+        std::string name;
+        std::cout << "Enter the name to search: ";
+        std::getline(std::cin, name);
+
+        bool found = false;
+
+        std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+        std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+        std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+        for (int i = 0; i < passengerCount; i++)
+        {
+            if (search_passenger_data[i].name == name)
+            {
+                found = true;
+                const Passenger& passenger = search_passenger_data[i];
+                std::cout << std::setfill(' ');
+                std::cout << std::setw(10) << passenger.passenger_id;
+                std::cout << std::setw(15) << passenger.name;
+                std::cout << std::setw(15) << passenger.surname;
+                std::cout << std::setw(15) << passenger.flight_number;
+                std::cout << std::setw(15) << passenger.seat_number << std::endl;
+            }
+        }
+
+        if (!found)
+        {
+            std::cout << "Name not found!" << std::endl;
+        }
+        break;
+    }
+    case 3:
+    {
+        std::string surname;
+        std::cout << "Enter the surname to search: ";
+        std::getline(std::cin, surname);
+
+        bool found = false;
+
+        std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+        std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+        std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+        for (int i = 0; i < passengerCount; i++)
+        {
+            if (search_passenger_data[i].surname == surname)
+            {
+                found = true;
+                const Passenger& passenger = search_passenger_data[i];
+                std::cout << std::setfill(' ');
+                std::cout << std::setw(12) << passenger.passenger_id;
+                std::cout << std::setw(15) << passenger.name;
+                std::cout << std::setw(15) << passenger.surname;
+                std::cout << std::setw(15) << passenger.flight_number;
+                std::cout << std::setw(15) << passenger.seat_number << std::endl;
+            }
+        }
+
+        if (!found)
+        {
+            std::cout << "Surname not found!" << std::endl;
+        }
+        break;
+    }
+    default:
+        std::cout << "Invalid input!" << std::endl;
+        break;
+    }
+
+    delete[] search_passenger_data;
+
+    clear_console();
+}
+
+
+void filterPassengerData()
+{
+    Passenger* filter_passenger_data = new Passenger[MAX_PASSENGERS];
+    int numPassengers = 0;
+    int filter_passenger_count = 0;
+    readPassengerDataFromFile(filter_passenger_data, numPassengers);
+
+    std::cout << "Available filters:" << std::endl;
+    std::cout << "1. Flight number" << std::endl;
+    std::cout << "2. Name" << std::endl;
+    std::cout << "3. Surname" << std::endl;
+    std::cout << std::endl;
+
+    int filter_flight_number = 0;
+    std::string filter_name = {};
+    std::string filter_surname = {};
+
+    std::cout << "How many filters do you want to apply? " << std::endl;
+    int filter_count = 0;
+    std::cout << "Enter the count of filters (MAX 3 filters): ";
+    std::cin >> filter_count;
+
+    std::cout << std::endl;
+
+    int* filterSelection = new int[filter_count];
+    std::set<int> selectedFilters;  // To keep track of selected filter numbers
+
+    for (int i = 0; i < filter_count; i++)
+    {
+        std::cout << "Enter the filter number " << i + 1 << ": ";
+        int filter_input = 0;
+        while (true)
+        {
+            std::cin >> filter_input;
+            if (filter_input < 1 || filter_input > 3) {
+                std::cout << "Invalid filter number entered! Please enter a filter number from 1 to 3: ";
+            }
+            else if (selectedFilters.count(filter_input) > 0) {
+                std::cout << "The same filter number has already been entered! Please enter a different filter number: ";
+            }
+            else {
+                selectedFilters.insert(filter_input);
+                break;
+            }
+        }
+        filterSelection[i] = filter_input;
+    }
+
+    std::cout << std::endl;
+    std::cout << "Input necessary data for the selected filters below!" << std::endl;
+    std::cout << "Selected filters: " << std::endl;
+
+    for (int i = 0; i < filter_count; i++)
+    {
+        if (filterSelection[i] == 1)
+        {
+            std::cout << "Flight Number: ";
+            std::cin >> filter_flight_number;
+        }
+        else if (filterSelection[i] == 2)
+        {
+            std::cout << "Name: ";
+            std::cin.ignore();
+            std::getline(std::cin, filter_name);
+        }
+        else if (filterSelection[i] == 3)
+        {
+            std::cout << "Surname: ";
+            std::cin.ignore();
+            std::getline(std::cin, filter_surname);
+        }
+    }
+
+    bool found = false;
+
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+    for (int i = 0; i < numPassengers; i++)
+    {
+        const Passenger& passenger = filter_passenger_data[i];
+
+        // Check if the passenger matches the selected filters
+        if ((filter_flight_number == 0 || passenger.flight_number == filter_flight_number) &&
+            (filter_name.empty() || passenger.name == filter_name) &&
+            (filter_surname.empty() || passenger.surname == filter_surname))
+        {
+            found = true;
+            std::cout << std::setfill(' ');
+            std::cout << std::setw(12) << passenger.passenger_id;
+            std::cout << std::setw(15) << passenger.name;
+            std::cout << std::setw(15) << passenger.surname;
+            std::cout << std::setw(15) << passenger.flight_number;
+            std::cout << std::setw(15) << passenger.seat_number << std::endl;
+        }
+    }
+
+    if (!found)
+    {
+        std::cout << "No passengers found matching the filter criteria!" << std::endl;
+    }
+
+    int nextAvailableIndex = 0;
+
+    for (int i = 0; i < numPassengers; i++)
+    {
+    	const Passenger& passenger = filter_passenger_data[i];
+
+		// Check if the passenger matches the selected filters
+		if ((filter_flight_number == 0 || passenger.flight_number == filter_flight_number) &&
+		(filter_name.empty() || passenger.name == filter_name) &&
+		(filter_surname.empty() || passenger.surname == filter_surname))
+		{
+			filter_passenger_data[nextAvailableIndex] = passenger;
+			nextAvailableIndex++;
+		}
+	}
+
+    // Update the number of flights to the new count
+    filter_passenger_count = nextAvailableIndex;
+
+    // Copy the filtered flights back to the original array
+    numPassengers = filter_passenger_count;
+    for (int i = 0; i < filter_passenger_count; i++) {
+        filter_passenger_data[i] = filter_passenger_data[i];
+    }
+
+    std::cout << "Do you want to create a new text file with sorted passenger data? (Y/N): ";
+    char create_file_option;
+    std::cin >> create_file_option;
+
+    if (create_file_option == 'Y' || create_file_option == 'y')
+    {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard the newline character from previous input
+
+        std::string filtered_file_name;
+        std::cout << "Enter the file name: ";
+        std::getline(std::cin, filtered_file_name);
+        filtered_file_name += ".txt";
+
+        createPassengerDataFile(filtered_file_name, filter_passenger_data, numPassengers);
+        std::cin.ignore();
+        std::cout << "Exit to MAIN MENU!" << std::endl;
+        clear_console();
+    }
+    else
+    {
+        std::cin.ignore();
+        std::cout << "Exit to MAIN MENU!" << std::endl;
+        clear_console();
+    }
+
+    delete[] filter_passenger_data;
+    delete[] filterSelection;
+
+}
+
+
+
+
