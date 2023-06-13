@@ -1141,41 +1141,55 @@ void deleteSingleFlightData()
 
 void deleteAllFlightData()
 {
-	if (std::remove("flight_info_data.txt") != 0)
+	std::cout << "Are you sure you want to delete all flight data? (Y/N): ";
+	char confirmation;
+	std::cin >> confirmation;
+
+	if (confirmation == 'Y' || confirmation == 'y')
 	{
-		std::cerr << "Failed to remove the original file!" << std::endl;
-		return;
+		if (std::remove("flight_info_data.txt") != 0)
+		{
+			std::cerr << "Failed to remove the original file!" << std::endl;
+			return;
+		}
+
+		// Rename the temporary file to the original file name
+		std::ifstream temp_file("temp_flight_info_data.txt", std::ios::in);
+		std::ofstream original_file("flight_info_data.txt", std::ios::out | std::ios::trunc);
+
+		if (!temp_file || !original_file)
+		{
+			std::cerr << "Failed to rename the file!" << std::endl;
+			return;
+		}
+
+		original_file << temp_file.rdbuf();
+
+		temp_file.close();
+		original_file.close();
+
+		// Delete the temporary file
+		if (std::remove("temp_flight_info_data.txt") != 0)
+		{
+			std::cerr << "Failed to delete the temporary file!" << std::endl;
+			return;
+		}
+
+		std::cout << "Flight data deleted successfully!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Flight data deletion canceled." << std::endl;
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
 	}
 
-	// Rename the temporary file to the original file name
-	std::ifstream temp_file("temp_flight_info_data.txt", std::ios::in);
-	std::ofstream original_file("flight_info_data.txt", std::ios::out | std::ios::trunc);
-
-	if (!temp_file || !original_file)
-	{
-		std::cerr << "Failed to rename the file!" << std::endl;
-		return;
-	}
-
-	original_file << temp_file.rdbuf();
-
-	temp_file.close();
-	original_file.close();
-
-	// Delete the temporary file
-	if (std::remove("temp_flight_info_data.txt") != 0)
-	{
-		std::cerr << "Failed to delete the temporary file!" << std::endl;
-		return;
-	}
-
-	std::cout << "Flight data deleted successfully!" << std::endl;
 	clear_console();
 }
 
 void deleteFilteredFlightData()
 {
-	// using filterFlightData() function to retrieve the filtered data, then delete them
 	Flight* filter_for_delete_flight_data = new Flight[MAX_FLIGHTS];
 	numFlights = 0;
 	int filter_delete_flight_number_count = 0;

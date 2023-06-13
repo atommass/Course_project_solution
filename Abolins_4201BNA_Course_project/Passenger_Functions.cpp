@@ -776,4 +776,364 @@ void editPassengerData()
 }
 
 
+void deleteSinglePassenger()
+{
+		passengerCount = 0;
+	Passenger* delete_passenger_data = new Passenger[MAX_PASSENGERS];
+	readPassengerDataFromFile(delete_passenger_data, passengerCount);
+	std::cout << "Available Passenger data for deleting." << std::endl << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
 
+	for (int i = 0; i < passengerCount; i++)
+	{
+		const Passenger& passenger = delete_passenger_data[i];
+		std::cout << std::setfill(' ');
+		std::cout << std::setw(12) << passenger.passenger_id;
+		std::cout << std::setw(15) << passenger.name;
+		std::cout << std::setw(15) << passenger.surname;
+		std::cout << std::setw(15) << passenger.flight_number;
+		std::cout << std::setw(15) << passenger.seat_number << std::endl;
+
+	}
+	std::cout << std::endl;
+	int passenger_number;
+	std::cout << "Enter the passenger ID number you want to delete: ";
+	std::cin >> passenger_number;
+
+	clear_console();
+
+	int passenger_index = -1;
+	for (int i = 0; i < passengerCount; i++)
+	{
+		if (delete_passenger_data[i].passenger_id == passenger_number)
+		{
+			passenger_index = i;
+			break;
+		}
+	}
+
+	if (passenger_index == -1)
+	{
+		std::cout << "Flight not found!" << std::endl;
+		delete[] delete_passenger_data;
+		return;
+	}
+
+	std::cout << "Passenger data before deleting:" << std::endl;
+	const Passenger& passenger = delete_passenger_data[passenger_index];
+	std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+	std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+    std::cout << std::setfill(' ');
+    std::cout << std::setw(12) << passenger.passenger_id;
+    std::cout << std::setw(15) << passenger.name;
+    std::cout << std::setw(15) << passenger.surname;
+    std::cout << std::setw(15) << passenger.flight_number;
+    std::cout << std::setw(15) << passenger.seat_number << std::endl;
+
+    std::cout << "Do you want to delete the selected passenger data (Y/N): ";
+    char delete_choice;
+    std::cin >> delete_choice;
+
+    if (delete_choice == 'Y' || delete_choice == 'y')
+    {
+    	std::ofstream temp_passenger_data_file("temp_passenger_info_data.txt", std::ios::out | std::ios::trunc);
+
+		if (!temp_passenger_data_file)
+		{
+			std::cerr << "Failed to open the file for writing!" << std::endl;
+			delete[] delete_passenger_data;
+			return;
+		}
+
+		// Write updated flight data to the file
+
+		for (int i = 0; i < passengerCount; i++)
+		{
+            if (i == passenger_index)
+            {
+                const Passenger& passenger = delete_passenger_data[i];
+                temp_passenger_data_file << std::setfill(' ');
+                temp_passenger_data_file << std::setw(12) << passenger.passenger_id;
+                temp_passenger_data_file << std::setw(15) << passenger.name;
+                temp_passenger_data_file << std::setw(15) << passenger.surname;
+                temp_passenger_data_file << std::setw(15) << passenger.flight_number;
+                temp_passenger_data_file << std::setw(15) << passenger.seat_number << std::endl;
+            }
+		}
+
+        temp_passenger_data_file.close();
+
+        if (std::remove("passenger_info_data.txt") != 0)
+        {
+        	std::cerr << "Error deleting file!" << std::endl;
+			delete[] delete_passenger_data;
+			return;
+		}
+
+        if (std::rename("temp_passenger_info_data.txt", "passenger_info_data.txt") != 0)
+        {
+        	std::cerr << "Error renaming file!" << std::endl;
+            delete[] delete_passenger_data;
+            return;
+        }
+
+		std::cout << "Passenger data deleted successfully!" << std::endl;
+	}
+	else
+	{
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
+    }
+
+    delete[] delete_passenger_data;
+
+    clear_console();
+}
+
+void deleteAllPassengers()
+{
+	std::cout << "Do you want to delete all passenger data (Y/N): ";
+	char delete_choice;
+	std::cin >> delete_choice;
+
+	if (delete_choice == 'Y' || delete_choice == 'y')
+	{
+		std::ofstream temp_passenger_data_file("temp_passenger_info_data.txt", std::ios::out | std::ios::trunc);
+
+		if (!temp_passenger_data_file)
+		{
+			std::cerr << "Failed to open the file for writing!" << std::endl;
+			return;
+		}
+
+		temp_passenger_data_file.close();
+
+		if (std::remove("passenger_info_data.txt") != 0)
+		{
+			std::cerr << "Error deleting file!" << std::endl;
+			return;
+		}
+
+		if (std::rename("temp_passenger_info_data.txt", "passenger_info_data.txt") != 0)
+		{
+			std::cerr << "Error renaming file!" << std::endl;
+			return;
+		}
+
+		std::cout << "All passenger data deleted successfully!" << std::endl;
+	}
+	else
+	{
+        std::cout << "Passenger data deletion canceled!" << std::endl;
+		std::cin.ignore();
+		std::cout << "Exit to MAIN MENU!" << std::endl;
+		clear_console();
+	}
+
+    clear_console();
+}
+
+void deleteFilteredPassengers()
+{
+	Passenger* delete_passenger_data = new Passenger[MAX_PASSENGERS];
+    passengerCount = 0;
+    int filter_delete_passenger_count = 0;
+    readPassengerDataFromFile(delete_passenger_data, passengerCount);
+
+    std::cout << "Available filters for passenger data:" << std::endl;
+    std::cout << "1. Flight number" << std::endl;
+    std::cout << "2. Seat number" << std::endl;
+    std::cout << "3. Surname" << std::endl;
+    std::cout << std::endl;
+
+    int filter_delete_flight_number = 0;
+    std::string filter_delete_seat_number = {};
+    std::string filter_delete_surname = {};
+
+    std::cout << "How many filters do you want to apply? ";
+    int filter_count = 0;
+    std::cout << "Enter the count of filters (MAX 3 filters): ";
+    std::cin >> filter_count;
+
+    std::cout << std::endl;
+
+    int* filter_delete_selection = new int[filter_count];
+    std::set<int> filter_delete_selection_set;
+
+    for (int i = 0; i < filter_count; i++)
+    {
+    	std::cout << "Enter the filter number " + i + 1 << ": ";
+		int filter_delete_selection_input = 0;
+        while (true)
+        {
+            std::cin >> filter_delete_selection_input;
+        	if (filter_delete_selection_input < 1 || filter_delete_selection_input > 3)
+        	{
+	        	std::cout << "Invalid filter number! Please enter a valid filter number: ";
+							}
+            else if (filter_delete_selection_set.count(filter_delete_selection_input) > 0)
+            {
+                std::cout << "The same filter number has already been entered! Please enter a different filter number: ";
+            }
+			else
+			{
+                filter_delete_selection_set.insert(filter_delete_selection_input);
+				break;
+			}
+		}
+        filter_delete_selection[i] = filter_delete_selection_input;
+	}
+
+    std::cout << std::endl;
+    std::cout << "Input necessary data for the selected filters below!" << std::endl;
+    std::cout << "Selected filters: " << std::endl;
+
+    for (int i = 0; i < filter_count; i++)
+    {
+        if (filter_delete_selection[i] == 1)
+        {
+            std::cout << "Flight Number: ";
+            std::cin >> filter_delete_flight_number;
+        }
+        else if (filter_delete_selection[i] == 2)
+        {
+            std::cout << "Seat number: ";
+            std::cin.ignore();
+            std::getline(std::cin, filter_delete_seat_number);
+        }
+        else if (filter_delete_selection[i] == 3)
+        {
+            std::cout << "Surname: ";
+            std::cin.ignore();
+            std::getline(std::cin, filter_delete_surname);
+        }
+    }
+
+    bool found = false;
+
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+    std::cout << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+    std::cout << "---------------------------------------------------------------------------------------------" << std::endl;
+
+    for (int i = 0; i < passengerCount; i++)
+    {
+        const Passenger& passenger = delete_passenger_data[i];
+
+        // Check if the passenger matches the selected filters
+        if ((filter_delete_flight_number == 0 || passenger.flight_number == filter_delete_flight_number) &&
+            (filter_delete_seat_number.empty() || passenger.seat_number == filter_delete_seat_number) &&
+            (filter_delete_surname.empty() || passenger.surname == filter_delete_surname))
+        {
+            found = true;
+            std::cout << std::setfill(' ');
+            std::cout << std::setw(12) << passenger.passenger_id;
+            std::cout << std::setw(15) << passenger.name;
+            std::cout << std::setw(15) << passenger.surname;
+            std::cout << std::setw(15) << passenger.flight_number;
+            std::cout << std::setw(15) << passenger.seat_number << std::endl;
+        }
+    }
+
+    int passenger_index = -1;
+    for (int i = 0; i < passengerCount; i++)
+    {
+        if (delete_passenger_data[i].flight_number = filter_delete_flight_number)
+        {
+	        passenger_index = i;
+			break;
+        }
+	}
+
+    if (!found)
+    {
+        std::cout << "No passengers found matching the filter criteria!" << std::endl;
+    }
+
+    int next_passenger_index = 0;
+    for (int i = 0; i < passengerCount; i++)
+    {
+        const Passenger& passenger = delete_passenger_data[i];
+
+        if ((filter_delete_flight_number == 0 || passenger.flight_number == filter_delete_flight_number) &&
+            (filter_delete_seat_number.empty() || passenger.seat_number == filter_delete_seat_number) &&
+            (filter_delete_surname.empty() || passenger.surname == filter_delete_surname))
+        {
+            delete_passenger_data[next_passenger_index] = passenger;
+            next_passenger_index++;
+        	found = true;
+        }
+		
+	}
+
+    filter_delete_passenger_count = next_passenger_index;
+    passengerCount = filter_delete_passenger_count;
+    for (int i = 0; i < filter_delete_passenger_count; i++)
+    {
+        delete_passenger_data[i] = delete_passenger_data[i];
+	}
+
+    std::cout << "Do you want to delete the filtered passengers? (Y/N): ";
+    char delete_passenger_choice;
+    std::cin >> delete_passenger_choice;
+
+    if (delete_passenger_choice == 'Y' || delete_passenger_choice == 'y')
+    {
+    	std::ofstream temp_delete_passenger_file("temp_passenger_info_data.txt", std::ios::out | std::ios::trunc);
+
+		if (!temp_delete_passenger_file)
+		{
+			std::cerr << "Error opening temporary data file!" << std::endl;
+            delete[] delete_passenger_data;
+            return;
+		}
+
+        for (int i = 0; i < passengerCount; i++)
+        {
+	        if (i != passenger_index)
+	        {
+                const Passenger& passenger = delete_passenger_data[i];
+	        	temp_delete_passenger_file << delete_passenger_data[i].passenger_id << std::endl;
+		        temp_delete_passenger_file << delete_passenger_data[i].name << std::endl;
+		        temp_delete_passenger_file << delete_passenger_data[i].surname << std::endl;
+		        temp_delete_passenger_file << delete_passenger_data[i].flight_number << std::endl;
+		        temp_delete_passenger_file << delete_passenger_data[i].seat_number << std::endl;
+	        }
+        }
+		
+        temp_delete_passenger_file.close();
+
+        if (std::remove("passenger_info_data.txt") != 0)
+        {
+        	std::cerr << "Error deleting passenger_info_data.txt!" << std::endl;
+			delete[] delete_passenger_data;
+			return;
+		}
+
+        if (std::rename("temp_passenger_info_data.txt", "passenger_info_data.txt") != 0)
+        {
+        	std::cerr << "Error renaming temp_passenger_info_data.txt!" << std::endl;
+			delete[] delete_passenger_data;
+			return;
+		}
+
+        delete[] delete_passenger_data;
+
+		std::cout << "Passengers that match selected filters deleted successfully!" << std::endl;
+
+        clear_console();
+	}
+	else 
+    {
+		std::cout << "Passengers not deleted!" << std::endl;
+        delete[] delete_passenger_data;
+        clear_console();
+
+		return;
+	}
+
+}

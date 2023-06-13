@@ -14,6 +14,7 @@ void sortPassengerData();
 void searchPassengerData();
 void filterPassengerData();
 void editPassengerData();
-
-
+void deleteSinglePassenger();
+void deleteAllPassengers();
+void deleteFilteredPassengers();
 

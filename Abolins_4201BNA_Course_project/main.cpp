@@ -237,7 +237,36 @@ int main()
 			}
 			else if (delete_menu_choice == 2)
 			{
-				// Delete passengers
+                clear_console();
+                std::cout << "Select delete method: " << std::endl;
+                std::cout << "1. Delete single passenger data" << std::endl;
+                std::cout << "2. Delete all passenger data" << std::endl;
+                std::cout << "3. Delete filtered passenger data" << std::endl;
+                std::cout << "Enter your choice: ";
+                int delete_passenger_data_choice;
+                std::cin >> delete_passenger_data_choice;
+
+                if (delete_passenger_data_choice == 1)
+                {
+                	clear_console();
+					deleteSinglePassenger();
+                }
+                else if (delete_passenger_data_choice == 2)
+                {
+                	clear_console();
+					deleteAllPassengers();
+				}
+				else if (delete_passenger_data_choice == 3)
+				{
+					clear_console();
+					deleteFilteredPassengers();
+				}
+				else
+				{
+					std::cout << "Invalid input!" << std::endl;
+					clear_console();
+					continue;
+				}
 			}
 			else
 			{
