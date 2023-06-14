@@ -1,6 +1,7 @@
 #include "DataTypes.h"
 #include "Flight_Functions.h"
 #include "Passenger_Functions.h"
+#include "Other_Functions.h"
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -279,6 +280,36 @@ int main()
         else if (main_menu_choice == 8)
         {
             // Additional features
+            std::cout << "Select the action you want to do: " << std::endl;
+            std::cout << "1. See passengers on a flight" << std::endl;
+
+            int additional_features_choice;
+            std::cout << "Enter your choice: ";
+            std::cin >> additional_features_choice;
+
+            if (additional_features_choice == 1)
+            {
+            	clear_console();
+				passengersOnFlight();
+            }
+            else if (additional_features_choice == 2)
+            {
+            	clear_console();
+            }
+            else if (additional_features_choice == 3)
+            {
+                clear_console();
+
+            }
+            else
+            {
+                std::cout << "Invalid input!";
+                std::cin.ignore();
+                clear_console();
+                continue;
+            }
+
+
 
 		}
         else if (main_menu_choice == 9) {

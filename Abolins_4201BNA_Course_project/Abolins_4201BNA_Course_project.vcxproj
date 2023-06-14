@@ -130,11 +130,13 @@
     <ClCompile Include="DateAndTimeFunctions.cpp" />
     <ClCompile Include="Flight_Functions.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Other_Functions.cpp" />
     <ClCompile Include="Passenger_Functions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataTypes.h" />
     <ClInclude Include="Flight_Functions.h" />
+    <ClInclude Include="Other_Functions.h" />
     <ClInclude Include="Passenger_Functions.h" />
   </ItemGroup>
   <ItemGroup>
