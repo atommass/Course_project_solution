@@ -72,10 +72,12 @@ int main()
             if (add_choice == 1)
             {
                 addFlightData();
+                
             }
             else if (add_choice == 2) 
             {
                 addPassengerData();
+               
             }
 			else
 			{
@@ -99,10 +101,12 @@ int main()
             if (sort_choice == 1)
             {
 	           sortFlightData();
+               
             }
             else if (sort_choice == 2)
             {
             	sortPassengerData();
+                
 			}
 			else
 			{
@@ -125,11 +129,15 @@ int main()
 
             if (search_choice == 1)
             {
+                
                 searchFlightData();
+               
             }
             else if (search_choice == 2)
             {
+               
                 searchPassengerData();
+               
 			}
 			else
 			{
@@ -151,11 +159,15 @@ int main()
             clear_console();
             if (filter_choice == 1)
             {
+              
             	filterFlightData();
+                
 			}
 			else if (filter_choice == 2)
 			{
+              
 				filterPassengerData();
+                
 			}
             else
 			{
@@ -178,11 +190,15 @@ int main()
 
             if (edit_choice == 1)
             {
+              
             	editFlightData();
+              
 			}
 			else if (edit_choice == 2)
 			{
+			
 				editPassengerData();
+
 			}
             else
             {
@@ -216,18 +232,24 @@ int main()
 
                 if (delete_flight_data_choice == 1)
                 {
-                    clear_console();
+            
                 	deleteSingleFlightData();
+                    std::cin.ignore();
+                    clear_console();
 				}
 				else if (delete_flight_data_choice == 2)
 				{
-                    clear_console();
+           
 					deleteAllFlightData();
+                    std::cin.ignore();
+                    clear_console();
 				}
 				else if (delete_flight_data_choice == 3)
 				{
-					clear_console();
+	
 					deleteFilteredFlightData();
+                    std::cin.ignore();
+                    clear_console();
 				}
 				else
 				{
@@ -249,18 +271,24 @@ int main()
 
                 if (delete_passenger_data_choice == 1)
                 {
-                	clear_console();
+               
 					deleteSinglePassenger();
+                    std::cin.ignore();
+                    clear_console();
                 }
                 else if (delete_passenger_data_choice == 2)
                 {
-                	clear_console();
+         
 					deleteAllPassengers();
+                    std::cin.ignore();
+                    clear_console();
 				}
 				else if (delete_passenger_data_choice == 3)
 				{
-					clear_console();
+			
 					deleteFilteredPassengers();
+                    std::cin.ignore();
+                    clear_console();
 				}
 				else
 				{
@@ -282,6 +310,9 @@ int main()
             // Additional features
             std::cout << "Select the action you want to do: " << std::endl;
             std::cout << "1. See passengers on a flight" << std::endl;
+            std::cout << "2. Perform data backup" << std::endl;
+            std::cout << "3. Restore from backup" << std::endl;
+            std::cout << "4. See time until flight" << std::endl;
 
             int additional_features_choice;
             std::cout << "Enter your choice: ";
@@ -291,13 +322,107 @@ int main()
             {
             	clear_console();
 				passengersOnFlight();
+                std::cin.ignore();
+                clear_console();
             }
             else if (additional_features_choice == 2)
             {
             	clear_console();
+                // Preform data backup
+                std::cout << "Which data do you want to back up?" << std::endl;
+                std::cout << "1. Flight Data" << std::endl;
+                std::cout << "2. Passenger Data" << std::endl;
+                std::cout << "3. Both" << std::endl;
+
+                std::cout << "Enter your choice: ";
+                int userChoice;
+                std::cin >> userChoice;
+
+                if (userChoice == 1)
+                {
+                    backupFlightData();
+                    std::cin.ignore();
+                    clear_console();
+                }
+                else if (userChoice == 2)
+                {
+                    backupPassengerData();
+                    std::cin.ignore();
+                    clear_console();
+                }
+                else if (userChoice == 3)
+                {
+                    backupFlightData();
+                    backupPassengerData();
+                    std::cin.ignore();
+                    clear_console();
+                }
+				else
+				{
+					std::cout << "Invalid input!" << std::endl;
+					std::cin.ignore();
+					clear_console();
+					continue;
+				}
+
             }
             else if (additional_features_choice == 3)
             {
+                clear_console();
+                std::cout << "Which data do you want to restore?" << std::endl;
+                std::cout << "1. Flight Data" << std::endl;
+                std::cout << "2. Passenger Data" << std::endl;
+                std::cout << "3. Both" << std::endl;
+
+                std::cout << "Enter your choice: ";
+                int userChoice;
+                std::cin >> userChoice;
+
+                if (userChoice == 1)
+                {
+                	restoreFlightData();
+					std::cin.ignore();
+					clear_console();
+				}
+				else if (userChoice == 2)
+				{
+					restorePassengerData();
+					std::cin.ignore();
+					clear_console();
+				}
+				else if (userChoice == 3)
+				{
+					restoreFlightData();
+					restorePassengerData();
+					std::cin.ignore();
+					clear_console();
+                }
+                else
+                {
+                    std::cout << "Invalid input!" << std::endl;
+                    std::cin.ignore();
+                    clear_console();
+                    continue;
+                }
+
+            }
+            else if (additional_features_choice == 4)
+            {
+				clear_console();
+                std::cout << "Time until selected passenger's flight." << std::endl << std::endl;
+	            // See time until selected passengers flight
+                std::cout << "Enter selected passenger's ID number: ";
+                int selected_passengerID;
+                std::cin >> selected_passengerID;
+
+                std::cout << std::endl;
+
+                std::cout << "Enter current date and time (DD/MM/YYYY HH:MM): ";
+                Flight::DateAndTime current_date_and_time = add_date_and_time();
+
+                calculateTimeUntilFlight(selected_passengerID, current_date_and_time);
+
+                std::cin.ignore();
                 clear_console();
 
             }
@@ -318,12 +443,12 @@ int main()
             std::cin >> terminate_choice;
             if (terminate_choice == "Y" || terminate_choice == "y") {
                 std::cout << "Exiting the program..." << std::endl;
-                break;  // Exit the loop and terminate the program
+                break; 
             }
             else {
                 std::cout << "Returning to the main menu..." << std::endl;
                 clear_console();
-                continue;  // Continue to the next iteration of the loop
+                continue;  
             }
         }
         else {

@@ -58,5 +58,11 @@
     <Text Include="passenger_info_data_backup.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="sample_flight_data.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="sample_passenger_data.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

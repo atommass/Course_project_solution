@@ -140,6 +140,10 @@ void createPassengerDataFile(const std::string& sorted_file_name, const Passenge
 	if (output_file.is_open())
 	{
 		// Write sorted passenger data to the file
+        output_file << "---------------------------------------------------------------------------------------------" << std::endl;
+        output_file << std::setw(12) << "Passenger ID" << std::setw(15) << "Name" << std::setw(15) << "Surname" << std::setw(15) << "Flight No." << std::setw(15) << "Seat No." << std::endl;
+        output_file << "---------------------------------------------------------------------------------------------" << std::endl;
+
 		for (int i = 0; i < numPassengers; i++)
 		{
 			const Passenger& passenger = sorted_passenger_data[i];
@@ -152,7 +156,7 @@ void createPassengerDataFile(const std::string& sorted_file_name, const Passenge
 		}
 
 		output_file.close();
-		std::cout << "File created successfully." << std::endl;
+		std::cout << "File created successfully. Press ENTER!" << std::endl;
 	}
 	else
 	{
@@ -612,7 +616,7 @@ void filterPassengerData()
         filter_passenger_data[i] = filter_passenger_data[i];
     }
 
-    std::cout << "Do you want to create a new text file with sorted passenger data? (Y/N): ";
+    std::cout << "Do you want to create a new text file with filtered passenger data? (Y/N): ";
     char create_file_option;
     std::cin >> create_file_option;
 

@@ -12,7 +12,7 @@ Flight::DateAndTime add_date_and_time()
 	std::cout << "Input date in format (YYYY / MM / DD)" << std::endl;
 
 	// ----- Year input -----
-	std::cout << "Input flight year (YYYY): ";
+	std::cout << "Input year (YYYY): ";
 	while (!(std::cin >> new_time.year) || new_time.year < 0 || std::to_string(new_time.year).length() != 4)
 	{
 		std::cerr << "Invalid year. Please enter a non-negative four-digit value." << std::endl;
@@ -22,7 +22,7 @@ Flight::DateAndTime add_date_and_time()
 	std::cin.ignore();
 
 	// ----- Month input -----
-	std::cout << "Input flight month (MM): ";
+	std::cout << "Input month (MM): ";
 	while (!(std::cin >> new_time.month) || new_time.month < 1 || new_time.month > 12)
 	{
 		std::cerr << "Invalid month. Please enter a valid value (1-12)." << std::endl;
@@ -31,7 +31,7 @@ Flight::DateAndTime add_date_and_time()
 	}
 
 	// ----- Day input -----
-	std::cout << "Input flight date (DD): ";
+	std::cout << "Input date (DD): ";
 	while (!(std::cin >> new_time.day) || new_time.day < 1 || new_time.day > 31)
 	{
 		std::cerr << "Invalid day. Please enter a valid value (1-31)." << std::endl;

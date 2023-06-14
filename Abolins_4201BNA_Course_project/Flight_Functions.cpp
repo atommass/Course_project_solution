@@ -192,6 +192,9 @@ void createFlightDataFile(const std::string& sorted_file_name, const Flight* sor
 	if (output_file.is_open())
 	{
 		// Write sorted flight data to the file
+		output_file << "---------------------------------------------------------------------------------------------" << std::endl;
+		output_file << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+		output_file << "---------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < numFlights; i++)
 		{
 			const Flight& flight = sort_flight_data[i];
@@ -210,7 +213,7 @@ void createFlightDataFile(const std::string& sorted_file_name, const Flight* sor
 		}
 
 		output_file.close();
-		std::cout << "File created successfully." << std::endl;
+		std::cout << "File created successfully. Press ENTER!" << std::endl;
 	}
 	else
 	{
@@ -603,7 +606,9 @@ void createFilteredFlightDataFile(std::string file_name, const Flight* flight_da
 
 	if (file.is_open())
 	{
-
+		file << "---------------------------------------------------------------------------------------------" << std::endl;
+		file << std::setw(10) << "Flight no." << std::setw(12) << "Arr / Dep" << std::setw(15) << "Date" << std::setw(28) << "Destination" << std::setw(19) << "Plane model" << std::endl;
+		file << "---------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < numFlights; i++)
 		{
 			const Flight& flight = flight_data[i];
@@ -624,7 +629,7 @@ void createFilteredFlightDataFile(std::string file_name, const Flight* flight_da
 		}
 
 		file.close();
-		std::cout << "File created successfully!" << std::endl;
+		std::cout << "File created successfully! Press ENTER!" << std::endl;
 	}
 	else
 	{

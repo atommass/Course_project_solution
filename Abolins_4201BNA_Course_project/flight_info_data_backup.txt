@@ -38,5 +38,4 @@
   987654         A          2023/11/30 16:45                Riga          Airbus 334
   198765         D          2023/11/30 12:30             Vilnius          Airbus 737
   209874         D          2023/09/08 08:05              Madrid          Boeing 777
-  321098         A          2023/09/08 04:50                Riga          Airbus 333
   432109         A          2023/12/04 18:15                Riga          Airbus 334
